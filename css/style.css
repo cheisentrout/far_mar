@@ -1,3 +1,15 @@
 body {
-  background-color: #98ACB2;
+  background-color: #F2EEEB;
+  color: gray;
+  font-size: 16px;
+  font-family: 'barlow';
+}
+
+h1 {
+  color: #D3785D;
+  font-family: 'dancing script';
+}
+
+a {
+  display: block;
 }

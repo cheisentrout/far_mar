@@ -1,20 +1,68 @@
 console.log('app.js hooked up');
 console.log($);
 
-let zip = '48103'
-let id = 1020005
+// let $zip = '48103'
+// let zip = $('input[type="text"]').val()
+// let id = 1020005
+// console.log(zip);
+// const $searchBar = $('#search-bar').html('test')
+// console.log($searchBar);
 
-$.ajax({
-  url: "http://search.ams.usda.gov/farmersmarkets/v1/data.svc/mktDetail?id=" + id,
-  //might have to do separate queries - zip and then id will provide market details like season, address, and products
-}).then(
-  (data) => {
-    console.log(data);
-  },
-  () => {
-    console.log('request did not work');
-  }
-)
+$(() => { //BEGIN window.onload
+
+  const $submit = $('#submit')
+  console.log($submit);
+
+  $submit.on('click', (event) => {
+    console.log('submit was clicked');
+    console.log(event.currentTarget);
+    event.preventDefault()
+
+    const $userZip = $('#search-bar').val()
+    console.log($userZip);
+
+    $.ajax({
+      url: `http://search.ams.usda.gov/farmersmarkets/v1/data.svc/zipSearch?zip=${$userZip}`
+
+      // mktDetail?id=" + id,
+      //might have to do separate queries - zip and then id will provide market details like season, address, and products
+      //query by zip
+    }).then(
+      (data) => {
+        console.log(data);
+        // console.log(typeof data); //this returns an OBJECT
+        // const resArr = data
+        // console.log(resArr);
+        // console.log(data.results[0]);
+        const resArr = data.results
+        for (let i = 0; i < resArr.length; i++) {
+          console.log('Loop ran');
+          const $marketResults = $('<a>').html(resArr[i].marketname)
+          // console.log(data[i].marketname);
+          $('body').append($marketResults)
+        }
+      },
+      () => {
+        console.log('request did not work');
+      }
+    )
+  })
+
+}) //END window.onload
+
+/*======= BELOW QUERY WORKS returns marketDetails by spec. ID ========*/
+// $.ajax({
+//   url: "http://search.ams.usda.gov/farmersmarkets/v1/data.svc/mktDetail?id=" + id,
+//   //might have to do separate queries - zip and then id will provide market details like season, address, and products
+// }).then(
+//   (data) => {
+//     console.log(data);
+//   },
+//   () => {
+//     console.log('request did not work');
+//   }
+// )
+/*==================== END marketDetails query ========================*/
 
 // function getResults(zip) {
 //     // or
