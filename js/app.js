@@ -40,8 +40,13 @@ $(() => { //BEGIN window.onload
         for (let i = 0; i < resArr.length; i++) {
           //create an article for each result that's returned
           const $mktArt = $('<article>').addClass('mkt-article')
+
+          const mktNameWithNum = resArr[i].marketname
+          const mktNameNoNum = mktNameWithNum.split(' ').slice(1).join(' ')
+
           //create an h3 that will have the text of the marketname key from the results array - give each the class of 'market-result'
-          const $mktName = $('<h3>').html(resArr[i].marketname).addClass('mkt-result')
+          const $mktName = $('<h3>').html(mktNameNoNum).addClass('mkt-result')
+
           //Store the result array key ID in a variable
           const $mktID = resArr[i].id
           //Add the value of the ID key to the marketName element as an ID
@@ -58,7 +63,7 @@ $(() => { //BEGIN window.onload
           let currentArtIndex = 1;
           //last index has to subtract 2 so that it doesn't include the next arrow
           let lastIndex = $('#mktname-results').children().length - 2
-          console.log(lastIndex);
+          // console.log(lastIndex);
 
           /*===== NEXT ARROW CLICK FCTN =======*/
           $nextArrow.on('click', (event) => {
