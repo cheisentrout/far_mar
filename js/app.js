@@ -49,8 +49,45 @@ $(() => { //BEGIN window.onload
           $mktArt.append($mktName)
           $mktResultCont.append($mktArt)
         }
-        const $nextArrow = $('<i>').addClass("fas fa-long-arrow-alt-right")
-        $('#mktname-results').append($nextArrow)
+          const $nextArrow = $('<i>').addClass("fas fa-long-arrow-alt-right")
+          const $prevArrow = $('<i>').addClass("fas fa-long-arrow-alt-left")
+          $('#mktname-results').prepend($prevArrow).append($nextArrow)
+
+          //VARs for carousel function:
+          //currentIndex has to start at 1 so that it doesn't include the previous arrow
+          let currentArtIndex = 1;
+          //last index has to subtract 2 so that it doesn't include the next arrow
+          let lastIndex = $('#mktname-results').children().length - 2
+          console.log(lastIndex);
+
+          /*===== NEXT ARROW CLICK FCTN =======*/
+          $nextArrow.on('click', (event) => {
+
+            $('#mktname-results').children().eq(currentArtIndex).css('display', 'none')
+
+            if (currentArtIndex < lastIndex) {
+              currentArtIndex++
+            } else {
+              currentArtIndex = 1
+            }
+
+            $('#mktname-results').children().eq(currentArtIndex).css('display', 'block')
+          })
+          /*===== PREVIOUS ARROW CLICK FCTN ======*/
+          $prevArrow.on('click', (event) => {
+            console.log('previous arrow was clicked');
+            $('#mktname-results').children().eq(currentArtIndex).css('display', 'none')
+
+            if (currentArtIndex > 1) {
+              currentArtIndex--
+            } else {
+              currentArtIndex = lastIndex
+            }
+
+            $('#mktname-results').children().eq(currentArtIndex).css('display', 'block')
+
+
+          })
 
       /*======== MARKET NAME ON CLICK ========*/
         $('.mkt-result').on('click', (event) => {
@@ -92,6 +129,7 @@ $(() => { //BEGIN window.onload
   $('#clear').on('click', (event) => {
     console.log('clear was clicked');
     $('.mkt-article').remove()
+    $('i').remove()
   })
 
 }) //END window.onload

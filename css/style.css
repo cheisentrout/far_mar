@@ -20,18 +20,19 @@ a {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
+  margin-top: 40px;
 }
 
 .mkt-article {
   width: 90%;
   height: 200px;
-  display: flex;
+  /* display: flex;
   flex-direction: row;
-  align-items: flex-start;
-  /* display: block; */
+  align-items: flex-start; */
+  display: none;
 }
 
-.mkt-article article:first-of-type {
+#mktname-results article:first-of-type {
   display: block;
 }
 /*
@@ -51,6 +52,10 @@ h3:nth-of-type(3) {
   color: #1D400D;
   padding: 20px;
   margin: 20px;
+}
+
+i {
+  font-size: 2em;
 }
 
 /* */
