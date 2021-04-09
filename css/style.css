@@ -13,3 +13,44 @@ h1 {
 a {
   display: block;
 }
+
+/*---------- MOBILE STYLES ----------*/
+
+#mktname-results {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+
+.mkt-article {
+  width: 90%;
+  height: 200px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  /* display: block; */
+}
+
+.mkt-article article:first-of-type {
+  display: block;
+}
+/*
+h3:first-of-type {
+  color: blue;
+}
+
+h3:nth-of-type(2) {
+  color: orange;
+}
+
+h3:nth-of-type(3) {
+  color: green;
+} */
+
+.mkt-result {
+  color: #1D400D;
+  padding: 20px;
+  margin: 20px;
+}
+
+/* */

@@ -10,44 +10,75 @@ console.log($);
 
 $(() => { //BEGIN window.onload
 
+  /*====== GLOBAL VARS ======*/
+
   const $submit = $('#submit')
-  console.log($submit);
+  const $mktResultCont = $('#mktname-results')
+
+  /*====== SUBMIT BTN EVENT ======*/
 
   $submit.on('click', (event) => {
-    console.log('submit was clicked');
-    console.log(event.currentTarget);
+
     event.preventDefault()
 
+    //store the user's input in a variable
     const $userZip = $('#search-bar').val()
-    console.log($userZip);
+    //then reset the input field to blank
     $('#search-bar').val('')
 
     $.ajax({
+      //Query the API based on the zipcode input by the user
       url: `http://search.ams.usda.gov/farmersmarkets/v1/data.svc/zipSearch?zip=${$userZip}`
 
-      // mktDetail?id=" + id,
-      //might have to do separate queries - zip and then id will provide market details like season, address, and products
-      //query by zip
     }).then(
       (data) => {
+
         console.log(data);
-        // console.log(typeof data); //this returns an OBJECT
-        // const resArr = data
-        // console.log(resArr);
-        // console.log(data.results[0]);
+        //Data is returned in an object, so I created a variable to store the arrays within the "results" key, which the data returns.
         const resArr = data.results
+        //for the length of the resArr, do the following:
         for (let i = 0; i < resArr.length; i++) {
-          console.log('Loop ran');
-          const $marketName = $('<p>').html(resArr[i].marketname).attr('href', '').addClass('market-result')
-          const $marketID = resArr[i].id
-          // console.log($marketID);
-          $marketName.attr('id', `${$marketID}`)
-          console.log(`${resArr[i].marketname}'s ID is: ${$marketName.attr('id')}`);
-          // console.log(data[i].marketname);
-          $('body').append($marketName)
+          //create an article for each result that's returned
+          const $mktArt = $('<article>').addClass('mkt-article')
+          //create an h3 that will have the text of the marketname key from the results array - give each the class of 'market-result'
+          const $mktName = $('<h3>').html(resArr[i].marketname).addClass('mkt-result')
+          //Store the result array key ID in a variable
+          const $mktID = resArr[i].id
+          //Add the value of the ID key to the marketName element as an ID
+          $mktName.attr('id', `${$mktID}`)
+          $mktArt.append($mktName)
+          $mktResultCont.append($mktArt)
         }
-        $('.market-result').on('click', (event) => {
-          console.log('market result was clicked');
+        const $nextArrow = $('<i>').addClass("fas fa-long-arrow-alt-right")
+        $('#mktname-results').append($nextArrow)
+
+      /*======== MARKET NAME ON CLICK ========*/
+        $('.mkt-result').on('click', (event) => {
+          const $mktName = $(event.currentTarget)
+          // console.log($(event.currentTarget).attr('id'));
+          const $mktID = $(event.currentTarget).attr('id')
+          console.log($mktID);
+          $.ajax({
+            url: `http://search.ams.usda.gov/farmersmarkets/v1/data.svc/mktDetail?id=${$mktID}`
+          }).then(
+            (data) => {
+              console.log(data);
+              const $mktDetails = data.marketdetails
+              // console.log($mktDetails);
+              const $address = $mktDetails.Address
+              const $map = $mktDetails.GoogleLink
+              const $products = $mktDetails.Products
+              const $schedule = $mktDetails.Schedule
+              console.log($address);
+              console.log($map);
+              console.log($products);
+              console.log($schedule);
+
+            },
+            () => {
+              console.log('request did not work');
+            }
+          )
 
         })
 
@@ -60,7 +91,7 @@ $(() => { //BEGIN window.onload
 
   $('#clear').on('click', (event) => {
     console.log('clear was clicked');
-    $('.market-result').remove()
+    $('.mkt-article').remove()
   })
 
 }) //END window.onload
@@ -111,3 +142,9 @@ $(() => { //BEGIN window.onload
 // }
 // searchResultsHandler(48103)
 // getResults('48103')
+
+// mktDetail?id=" + id,
+//might have to do separate queries - zip and then id will provide market details like season, address, and products
+//query by zip
+
+          // console.log(`${resArr[i].marketname}'s ID is: ${$marketName.attr('id')}`);
