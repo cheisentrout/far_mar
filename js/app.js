@@ -20,6 +20,7 @@ $(() => { //BEGIN window.onload
 
     const $userZip = $('#search-bar').val()
     console.log($userZip);
+    $('#search-bar').val('')
 
     $.ajax({
       url: `http://search.ams.usda.gov/farmersmarkets/v1/data.svc/zipSearch?zip=${$userZip}`
@@ -37,15 +38,29 @@ $(() => { //BEGIN window.onload
         const resArr = data.results
         for (let i = 0; i < resArr.length; i++) {
           console.log('Loop ran');
-          const $marketResults = $('<a>').html(resArr[i].marketname)
+          const $marketName = $('<p>').html(resArr[i].marketname).attr('href', '').addClass('market-result')
+          const $marketID = resArr[i].id
+          // console.log($marketID);
+          $marketName.attr('id', `${$marketID}`)
+          console.log(`${resArr[i].marketname}'s ID is: ${$marketName.attr('id')}`);
           // console.log(data[i].marketname);
-          $('body').append($marketResults)
+          $('body').append($marketName)
         }
+        $('.market-result').on('click', (event) => {
+          console.log('market result was clicked');
+
+        })
+
       },
       () => {
         console.log('request did not work');
       }
     )
+  })
+
+  $('#clear').on('click', (event) => {
+    console.log('clear was clicked');
+    $('.market-result').remove()
   })
 
 }) //END window.onload
