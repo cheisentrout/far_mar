@@ -15,6 +15,7 @@ $(() => { //BEGIN window.onload
   const $submit = $('#submit')
   const $mktResultCont = $('#mktname-results')
   const $mktResSummary = $('#res-summary')
+  const $mktSpecs = $('#mkt-specs')
 
   /*====== SUBMIT BTN EVENT ======*/
 
@@ -108,18 +109,32 @@ $(() => { //BEGIN window.onload
             url: `http://search.ams.usda.gov/farmersmarkets/v1/data.svc/mktDetail?id=${$mktID}`
           }).then(
             (data) => {
-              console.log(data);
+              // console.log(data);
               const $mktDetails = data.marketdetails
               // console.log($mktDetails);
-              const $address = $mktDetails.Address
-              const $map = $mktDetails.GoogleLink
-              const $products = $mktDetails.Products
-              const $schedule = $mktDetails.Schedule
-              console.log($address);
-              console.log($map);
-              console.log($products);
-              console.log($schedule);
-
+              const $address = $('<p>')
+                .html($mktDetails.Address)
+                .addClass('mkt-specs')
+              const $map = $('<a>')
+                .html(`${$mktDetails.GoogleLink}`)
+                .attr('href', `${$mktDetails.GoogleLink}`)
+                .attr('target', `${$mktDetails.GoogleLink}`)
+                .addClass('mkt-specs')
+              // const $prodList = $('<ul>')
+              const $products = $('<p>')
+                .html($mktDetails.Products)
+                .addClass('mkt-specs')
+              const $schedule = $('<p>')
+                .html($mktDetails.Schedule)
+                .addClass('mkt-specs')
+              const $mktNameHeader = $('<h2>')
+                .html($mktName.html())
+                .addClass('mkt-specs')
+              $mktSpecs.append($mktNameHeader)
+              $mktSpecs.append($address)
+              $mktSpecs.append($map)
+              $mktSpecs.append($schedule)
+              $mktSpecs.append($products)
             },
             () => {
               console.log('request did not work');
@@ -140,6 +155,7 @@ $(() => { //BEGIN window.onload
     $('.mkt-num').remove()
     $('.mkt-article').remove()
     $('i').remove()
+    $('.mkt-specs').remove()
   })
 
 }) //END window.onload
