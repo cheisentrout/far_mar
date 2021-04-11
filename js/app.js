@@ -14,6 +14,7 @@ $(() => { //BEGIN window.onload
 
   const $submit = $('#submit')
   const $mktResultCont = $('#mktname-results')
+  const $mktResSummary = $('#res-summary')
 
   /*====== SUBMIT BTN EVENT ======*/
 
@@ -36,6 +37,9 @@ $(() => { //BEGIN window.onload
         console.log(data);
         //Data is returned in an object, so I created a variable to store the arrays within the "results" key, which the data returns.
         const resArr = data.results
+        // console.log(`The results array is ${resArr.length} items long.`);
+        const $carItemNum = $('<h3>').html(`There are ${resArr.length} markets near you!`).addClass('mkt-num')
+        $mktResSummary.append($carItemNum)
         //for the length of the resArr, do the following:
         for (let i = 0; i < resArr.length; i++) {
           //create an article for each result that's returned
@@ -133,6 +137,7 @@ $(() => { //BEGIN window.onload
 
   $('#clear').on('click', (event) => {
     console.log('clear was clicked');
+    $('.mkt-num').remove()
     $('.mkt-article').remove()
     $('i').remove()
   })
