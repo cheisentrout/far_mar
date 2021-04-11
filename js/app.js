@@ -12,6 +12,7 @@ $(() => { //BEGIN window.onload
 
   /*====== GLOBAL VARS ======*/
 
+  const $pageHeader = $('header')
   const $submit = $('#submit')
   const $mktResultCont = $('#mktname-results')
   const $mktResSummary = $('#res-summary')
@@ -22,6 +23,8 @@ $(() => { //BEGIN window.onload
   $submit.on('click', (event) => {
 
     event.preventDefault()
+    $mktResultCont.children().remove()
+    $mktResSummary.remove()
 
     //store the user's input in a variable
     const $userZip = $('#search-bar').val()
@@ -35,29 +38,36 @@ $(() => { //BEGIN window.onload
     }).then(
       (data) => {
 
+        $pageHeader.addClass('with-results')
         console.log(data);
         //Data is returned in an object, so I created a variable to store the arrays within the "results" key, which the data returns.
         const resArr = data.results
-        // console.log(`The results array is ${resArr.length} items long.`);
         const $carItemNum = $('<h3>').html(`There are ${resArr.length} markets near you!`).addClass('mkt-num')
         $mktResSummary.append($carItemNum)
+
+        const imgArr = ['./img/ann_arbor.jpg', './img/banana_boxes.jpg', './img/berries.jpg', './img/bread.jpg', './img/cheese.jpg', './img/crowded_street.jpg', './img/eggs.jpg', './img/flower_buckets.jpg', './img/open_mic.jpg', './img/pink_flowers.jpg', './img/quality_meat.jpg', './img/salad_greens.jpg', './img/vendor.jpg']
         //for the length of the resArr, do the following:
         for (let i = 0; i < resArr.length; i++) {
           //create an article for each result that's returned
           const $mktArt = $('<article>').addClass('mkt-article')
+
+          // $mktResultCont.css('background-image', `url(${imgArr[Math.floor(Math.random() * imgArr.length)]})`)
 
           const mktNameWithNum = resArr[i].marketname
           const mktNameNoNum = mktNameWithNum.split(' ').slice(1).join(' ')
 
           //create an h3 that will have the text of the marketname key from the results array - give each the class of 'market-result'
           const $mktName = $('<h3>').html(mktNameNoNum).addClass('mkt-result')
-
+          // const $mktImg = $('<img>').attr('src', `${imgArr[Math.floor(Math.random() * imgArr.length`)]}`)
           //Store the result array key ID in a variable
           const $mktID = resArr[i].id
           //Add the value of the ID key to the marketName element as an ID
           $mktName.attr('id', `${$mktID}`)
+          // $mktResultCont.attr('id', `${$mktID}`)
           $mktArt.append($mktName)
+          // $mktArt.append($mktImg)
           $mktResultCont.append($mktArt)
+          $mktResultCont.css('background-image', `url(${imgArr[Math.floor(Math.random() * imgArr.length)]})`)
         }
           const $nextArrow = $('<i>').addClass("fas fa-long-arrow-alt-right")
           const $prevArrow = $('<i>').addClass("fas fa-long-arrow-alt-left")
@@ -74,6 +84,7 @@ $(() => { //BEGIN window.onload
           $nextArrow.on('click', (event) => {
 
             $('#mktname-results').children().eq(currentArtIndex).css('display', 'none')
+            $mktResultCont.css('background-image', `url(${imgArr[Math.floor(Math.random() * imgArr.length)]})`)
 
             if (currentArtIndex < lastIndex) {
               currentArtIndex++
@@ -81,7 +92,9 @@ $(() => { //BEGIN window.onload
               currentArtIndex = 1
             }
 
-            $('#mktname-results').children().eq(currentArtIndex).css('display', 'block')
+            // $('#mktname-results').children().eq(currentArtIndex).css('display', 'block')
+            $('#mktname-results').children().eq(currentArtIndex).css({'display': 'flex', 'align-items': 'center', 'justify-content': 'center'})
+
           })
           /*===== PREVIOUS ARROW CLICK FCTN ======*/
           $prevArrow.on('click', (event) => {
@@ -100,12 +113,19 @@ $(() => { //BEGIN window.onload
           })
 
       /*======== MARKET NAME ON CLICK ========*/
+      //any element with the class mkt-result, do the following on click:
         $('.mkt-result').on('click', (event) => {
+          console.log(event);
+          //first, remove any market specs that already populate the page (from a previous search)
+          $('#mkt-specs').children().remove()
+          //store the event's current target in a variable
           const $mktName = $(event.currentTarget)
-          // console.log($(event.currentTarget).attr('id'));
+          console.log($(event.currentTarget).attr('id'));
+          //store the currentTarget's id as a variable
           const $mktID = $(event.currentTarget).attr('id')
           console.log($mktID);
           $.ajax({
+            //query the API for the market id assigned to the event target
             url: `http://search.ams.usda.gov/farmersmarkets/v1/data.svc/mktDetail?id=${$mktID}`
           }).then(
             (data) => {
@@ -120,10 +140,17 @@ $(() => { //BEGIN window.onload
                 .attr('href', `${$mktDetails.GoogleLink}`)
                 .attr('target', `${$mktDetails.GoogleLink}`)
                 .addClass('mkt-specs')
-              // const $prodList = $('<ul>')
-              const $products = $('<p>')
-                .html($mktDetails.Products)
+              const $prodList = $('<ul>')
                 .addClass('mkt-specs')
+              const splitProducts = $mktDetails.Products.split(';')
+              console.log(splitProducts);
+              for (let i = 0; i < splitProducts.length; i++) {
+                const $product = $('<li>').html(splitProducts[i]).addClass('mkt-specs')
+                $prodList.append($product)
+              }
+              // const $products = $('<p>')
+              //   .html($mktDetails.Products)
+              //   .addClass('mkt-specs')
               const $schedule = $('<p>')
                 .html($mktDetails.Schedule)
                 .addClass('mkt-specs')
@@ -134,7 +161,8 @@ $(() => { //BEGIN window.onload
               $mktSpecs.append($address)
               $mktSpecs.append($map)
               $mktSpecs.append($schedule)
-              $mktSpecs.append($products)
+              $mktSpecs.append($prodList)
+              // $mktSpecs.append($products)
             },
             () => {
               console.log('request did not work');
@@ -151,11 +179,12 @@ $(() => { //BEGIN window.onload
   })
 
   $('#clear').on('click', (event) => {
-    console.log('clear was clicked');
+    // console.log('clear was clicked');
     $('.mkt-num').remove()
     $('.mkt-article').remove()
     $('i').remove()
     $('.mkt-specs').remove()
+    $pageHeader.removeClass('with-results')
   })
 
 }) //END window.onload

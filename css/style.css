@@ -1,19 +1,42 @@
 body {
-  background-color: #F2EEEB;
+  background-color: #CE7E5D;
   color: gray;
   font-size: 16px;
-  font-family: 'barlow';
+  font-family: 'quicksand';
   text-align: center;
+  /* display: flex;
+  align-items: center; */
 }
 
 h1 {
-  color: #D3785D;
+  color: #D6DCD8;
   font-family: 'dancing script';
-  font-size: 3em;
+  font-size: 4em;
 }
 
+input, button {
+  font-family: 'quicksand';
+  letter-spacing: .05em;
+}
 
 /*---------- MOBILE STYLES ----------*/
+
+/* HEADER - logo + slogan */
+
+header {
+  margin-top: 200px;
+  transition: .8s ease;
+}
+
+header p {
+  color: #F0F1F2;
+}
+
+body .with-results {
+  align-items: flex-start;
+}
+
+/* SEARCH */
 
 #search-bar {
   outline: none;
@@ -21,35 +44,69 @@ h1 {
   height: 40px;
   width: 300px;
   margin: auto;
-  font-family: 'barlow';
+  /* font-family: 'barlow'; */
   font-size: 1em;
   padding-left: 10px;
+  border: 2px solid #557570;
+  background-color: #F0F1F2;
 }
 
 #submit, #clear {
   margin: 15px auto;
   padding: 5px 10px;
   display: block;
-  font-family: 'barlow';
+  /* font-family: 'barlow'; */
   font-size: 1em;
 }
 
 #submit {
   width: 120px;
   height: 40px;
-
+  background-color: #557570;
+  color: #F0F1F2;
+  border: none;
   font-size: 1.2em;
+  transition: .5s;
+  outline: none;
+}
+
+#submit:hover {
+  background-color: #D6DCD8;
+  color: #557570;
+}
+
+#clear {
+  background-color: #A2543D;
+  color: #F0F1F2;
+  outline: none;
+  border: none;
+  transition: .5s;
+}
+
+#clear:hover {
+  background-color: #D39A89;
+}
+
+/* Market Carousel Results */
+
+.mkt-num {
+  margin-top: 40px;
+  color: #F0F1F2;
 }
 
 #mktname-results {
   display: flex;
   flex-flow: row wrap;
-  justify-content: center;
-  margin-top: 60px;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 40px;
+  padding: 0 15px;
+  background-size: cover;
+  /* transition: .3s ease; */
 }
 
 .mkt-article {
-  width: 90%;
+  width: 70%;
   height: 200px;
   /* display: flex;
   flex-direction: row;
@@ -57,20 +114,50 @@ h1 {
   display: none;
 }
 
-#mktname-results article:first-of-type {
-  display: block;
-}
+/* .mkt-article img {
+  width: 100%;
+  height: auto;
+  /* max-height: 155px; */
+/* }  */
 
-h3 {
-  margin-top: 0;
+#mktname-results article:first-of-type {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .mkt-result {
-  color: #1D400D;
-  /* padding: 20px;
-  margin: 20px; */
+  font-size: 1.5em;
+  color: #557570;
+  background: whitesmoke;
+  opacity: 80%;
+  padding: 20px;
+  border-radius: 5px;
+  transition: 1s;
+}
+
+.mkt-result:hover {
+  transform: scale(1.05)
 }
 
 i {
-  font-size: 2em;
+  font-size: 3em;
+  color: whitesmoke;
+  transition: .5s;
+}
+
+i:hover {
+  color: #D39A89;
+  transform: scale(1.5)
+}
+
+/* Market Details Styles */
+
+#mkt-specs {
+  margin-top: 40px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
 }
