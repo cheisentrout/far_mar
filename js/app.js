@@ -24,7 +24,7 @@ $(() => { //BEGIN window.onload
 
     event.preventDefault()
     $mktResultCont.children().remove()
-    $mktResSummary.remove()
+    // $mktResSummary.remove()
 
     //store the user's input in a variable
     const $userZip = $('#search-bar').val()
@@ -38,7 +38,9 @@ $(() => { //BEGIN window.onload
     }).then(
       (data) => {
 
-        $pageHeader.addClass('with-results')
+        // $('body').addClass('with-results')
+        // $pageHeader.addClass('with-results')
+        $('header').addClass('with-results')
         console.log(data);
         //Data is returned in an object, so I created a variable to store the arrays within the "results" key, which the data returns.
         const resArr = data.results
@@ -98,6 +100,7 @@ $(() => { //BEGIN window.onload
           })
           /*===== PREVIOUS ARROW CLICK FCTN ======*/
           $prevArrow.on('click', (event) => {
+
             console.log('previous arrow was clicked');
             $('#mktname-results').children().eq(currentArtIndex).css('display', 'none')
 
@@ -107,7 +110,7 @@ $(() => { //BEGIN window.onload
               currentArtIndex = lastIndex
             }
 
-            $('#mktname-results').children().eq(currentArtIndex).css('display', 'block')
+            $('#mktname-results').children().eq(currentArtIndex).css({'display': 'flex', 'align-items': 'center', 'justify-content': 'center'})
 
 
           })
@@ -134,9 +137,10 @@ $(() => { //BEGIN window.onload
               // console.log($mktDetails);
               const $address = $('<p>')
                 .html($mktDetails.Address)
+                .attr('id', 'address')
                 .addClass('mkt-specs')
               const $map = $('<a>')
-                .html(`${$mktDetails.GoogleLink}`)
+                .html(`Find on Google Maps`)
                 .attr('href', `${$mktDetails.GoogleLink}`)
                 .attr('target', `${$mktDetails.GoogleLink}`)
                 .addClass('mkt-specs')
@@ -157,10 +161,11 @@ $(() => { //BEGIN window.onload
               const $mktNameHeader = $('<h2>')
                 .html($mktName.html())
                 .addClass('mkt-specs')
+              $mktSpecs.css({'background-color': '#D6DCD8', 'padding': '20px'})
               $mktSpecs.append($mktNameHeader)
               $mktSpecs.append($address)
-              $mktSpecs.append($map)
               $mktSpecs.append($schedule)
+              $mktSpecs.append($map)
               $mktSpecs.append($prodList)
               // $mktSpecs.append($products)
             },
@@ -184,6 +189,7 @@ $(() => { //BEGIN window.onload
     $('.mkt-article').remove()
     $('i').remove()
     $('.mkt-specs').remove()
+    $('#mkt-specs').remove()
     $pageHeader.removeClass('with-results')
   })
 
