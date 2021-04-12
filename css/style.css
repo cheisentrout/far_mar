@@ -220,11 +220,13 @@ li {
 
 h2 {
     width: 50%;
+    text-align: left;
   }
 
   .addAndSched {
     width: 40%;
     margin: 20px 0 0 10px;
+    text-align: right;
   }
 
 }

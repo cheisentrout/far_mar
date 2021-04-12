@@ -3,6 +3,8 @@
 
 $(() => { //BEGIN window.onload
 
+  $('#clear').hide()
+
   /*====== GLOBAL VARS ======*/
 
   const $pageHeader = $('header')
@@ -20,6 +22,7 @@ $(() => { //BEGIN window.onload
     $mktResultCont.children().remove()
     $('.mkt-num').remove()
     $mktSpecs.empty()
+    $('#clear').show()
 
     //store the user's input in a variable
     const $userZip = $('#search-bar').val()
@@ -133,12 +136,13 @@ $(() => { //BEGIN window.onload
       /*======== MARKET NAME ON CLICK ========*/
       //any element with the class mkt-result, do the following on click:
         $('.mkt-result').on('click', (event) => {
-          console.log(event);
+          console.log(event)
           //first, remove any market specs that already populate the page (from a previous search)
           // $('#mkt-specs').children().remove()
           $mktSpecs.empty()
           //store the event's current target in a variable
           const $mktName = $(event.currentTarget)
+          console.log($(event.currentTarget));
           //store the currentTarget's id as a variable
           const $mktID = $(event.currentTarget).attr('id')
           console.log($mktID);
@@ -150,30 +154,30 @@ $(() => { //BEGIN window.onload
               // console.log(data);
               $mktSpecs.show()
               const $mktDetails = data.marketdetails
-              // console.log($mktDetails);
+              // console.log($mktDetails)
+              //what if right here, we could perform a google maps query for the data.marketdetails.Address of the event.currentTarget?
               const $address = $('<p>')
                 .html($mktDetails.Address)
                 .attr('id', 'address')
                 .addClass('mkt-specs')
-              const $map = $('<a>')
-                .html(`Find on Google Maps`)
-                .attr('href', `${$mktDetails.GoogleLink}`)
-                .attr('target', `${$mktDetails.GoogleLink}`)
-                .addClass('mkt-specs')
-              // const $map = $('<object>')
-              //   .attr('data', `${$mktDetails.GoogleLink}`)
-              //   .css({'width': '50%', 'height': 'auto'})
+              // const $map = $('<a>')
+              //   .html(`Find on Google Maps`)
+              //   .attr('href', `${$mktDetails.GoogleLink}`)
+              //   .attr('target', `${$mktDetails.GoogleLink}`)
+              //   .addClass('mkt-specs')
+                console.log($mktDetails.GoogleLink);
+              const $map = $('<iframe>')
+              .attr('src', `src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCpOYsYQDi7AYlherWrBKR7rhDZT86L1Fc
+    &q=${$mktDetails.address}">`)
+              .css({'width': '400px', 'height': '250px'})
               const $prodList = $('<ul>')
                 .addClass('mkt-specs')
               const splitProducts = $mktDetails.Products.split(';')
-              console.log(splitProducts);
+              // console.log(splitProducts);
               for (let i = 0; i < splitProducts.length; i++) {
                 const $product = $('<li>').html(splitProducts[i]).addClass('mkt-specs')
                 $prodList.append($product)
               }
-              // const $products = $('<p>')
-              //   .html($mktDetails.Products)
-              //   .addClass('mkt-specs')
               const $schedule = $('<p>')
                 .html($mktDetails.Schedule)
                 .addClass('mkt-specs')
@@ -215,9 +219,12 @@ $(() => { //BEGIN window.onload
     $mktSpecs.empty()
     $mktSpecs.hide()
     $pageHeader.removeClass('with-results')
+    $('#clear').hide()
   })
 
 }) //END window.onload
+
+
 
 
 /*======================================================
@@ -225,6 +232,8 @@ $(() => { //BEGIN window.onload
 PROGRAM NOTES AND ATTEMPTS BELOW
 -------------------------------------------------------
 =======================================================*/
+
+// http://maps.google.com/?q=42.165956%2C%20-83.781146%20(%22Saline+Farmers+Market%22
 
 // let $zip = '48103'
 // let zip = $('input[type="text"]').val()
