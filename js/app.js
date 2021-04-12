@@ -17,6 +17,7 @@ $(() => { //BEGIN window.onload
   const $mktResultCont = $('#mktname-results')
   const $mktResSummary = $('#res-summary')
   const $mktSpecs = $('#mkt-specs')
+  const imgArr = ['./img/ann_arbor.jpg', './img/banana_boxes.jpg', './img/berries.jpg', './img/bread.jpg', './img/cheese.jpg', './img/crowded_street.jpg', './img/eggs.jpg', './img/flower_buckets.jpg', './img/open_mic.jpg', './img/pink_flowers.jpg', './img/quality_meat.jpg', './img/salad_greens.jpg', './img/vendor.jpg']
 
   /*====== SUBMIT BTN EVENT ======*/
 
@@ -44,33 +45,55 @@ $(() => { //BEGIN window.onload
         console.log(data);
         //Data is returned in an object, so I created a variable to store the arrays within the "results" key, which the data returns.
         const resArr = data.results
-        const $carItemNum = $('<h3>').html(`There are ${resArr.length} markets near you!`).addClass('mkt-num')
-        $mktResSummary.append($carItemNum)
+        // if (resArr.marketname !== "Didn't find that zip code.") {
+        //   const $carItemNum = $('<h3>').html(`There are ${resArr.length} markets near zipcode ${$userZip}!`).addClass('mkt-num')
+        //   $mktResSummary.append($carItemNum)
+        const $carItemNum = $('<h3>').html(`There are ${resArr.length} markets near zipcode ${$userZip}!`).addClass('mkt-num')
+        //THIS LINE NEEDS ATTN: currently appending even if zip is not recognized
+          $mktResSummary.append($carItemNum)
 
-        const imgArr = ['./img/ann_arbor.jpg', './img/banana_boxes.jpg', './img/berries.jpg', './img/bread.jpg', './img/cheese.jpg', './img/crowded_street.jpg', './img/eggs.jpg', './img/flower_buckets.jpg', './img/open_mic.jpg', './img/pink_flowers.jpg', './img/quality_meat.jpg', './img/salad_greens.jpg', './img/vendor.jpg']
-        //for the length of the resArr, do the following:
-        for (let i = 0; i < resArr.length; i++) {
-          //create an article for each result that's returned
-          const $mktArt = $('<article>').addClass('mkt-article')
 
-          // $mktResultCont.css('background-image', `url(${imgArr[Math.floor(Math.random() * imgArr.length)]})`)
+          //for the length of the resArr, do the following:
+          for (let i = 0; i < resArr.length; i++) {
+            //create an article for each result that's returned
 
-          const mktNameWithNum = resArr[i].marketname
-          const mktNameNoNum = mktNameWithNum.split(' ').slice(1).join(' ')
+            if (resArr[i].marketname !== "Didn't find that zip code.") {
 
-          //create an h3 that will have the text of the marketname key from the results array - give each the class of 'market-result'
-          const $mktName = $('<h3>').html(mktNameNoNum).addClass('mkt-result')
+              const $mktArt = $('<article>').addClass('mkt-article')
+
+              // $mktResultCont.css('background-image', `url(${imgArr[Math.floor(Math.random() * imgArr.length)]})`)
+
+              const mktNameWithNum = resArr[i].marketname
+              const mktNameNoNum = mktNameWithNum.split(' ').slice(1).join(' ')
+
+            //create an h3 that will have the text of the marketname key from the results array - give each the class of 'market-result'
+            // if (resArr[i].marketname !== "Didn't find that zip code.") {
+              const $mktName = $('<h3>').html(mktNameNoNum).addClass('mkt-result')
+              //Store the result array key ID in a variable
+              const $mktID = resArr[i].id
+              //Add the value of the ID key to the marketName element as an ID
+              $mktName.attr('id', `${$mktID}`)
+              // $mktResultCont.attr('id', `${$mktID}`)
+              $mktArt.append($mktName)
+              // $mktArt.append($mktImg)
+              $mktResultCont.append($mktArt)
+              $mktResultCont.css('background-image', `url(${imgArr[Math.floor(Math.random() * imgArr.length)]})`)
+            // }
+            } else {
+            alert(`We didn't recognize the zip code ${$userZip}. Please try a different zip code.`)
+            }
+          }
           // const $mktImg = $('<img>').attr('src', `${imgArr[Math.floor(Math.random() * imgArr.length`)]}`)
-          //Store the result array key ID in a variable
-          const $mktID = resArr[i].id
-          //Add the value of the ID key to the marketName element as an ID
-          $mktName.attr('id', `${$mktID}`)
-          // $mktResultCont.attr('id', `${$mktID}`)
-          $mktArt.append($mktName)
-          // $mktArt.append($mktImg)
-          $mktResultCont.append($mktArt)
-          $mktResultCont.css('background-image', `url(${imgArr[Math.floor(Math.random() * imgArr.length)]})`)
-        }
+          // //Store the result array key ID in a variable
+          // const $mktID = resArr[i].id
+          // //Add the value of the ID key to the marketName element as an ID
+          // $mktName.attr('id', `${$mktID}`)
+          // // $mktResultCont.attr('id', `${$mktID}`)
+          // $mktArt.append($mktName)
+          // // $mktArt.append($mktImg)
+          // $mktResultCont.append($mktArt)
+          // $mktResultCont.css('background-image', `url(${imgArr[Math.floor(Math.random() * imgArr.length)]})`)
+        // }
           const $nextArrow = $('<i>').addClass("fas fa-long-arrow-alt-right")
           const $prevArrow = $('<i>').addClass("fas fa-long-arrow-alt-left")
           $('#mktname-results').prepend($prevArrow).append($nextArrow)
@@ -101,8 +124,8 @@ $(() => { //BEGIN window.onload
           /*===== PREVIOUS ARROW CLICK FCTN ======*/
           $prevArrow.on('click', (event) => {
 
-            console.log('previous arrow was clicked');
             $('#mktname-results').children().eq(currentArtIndex).css('display', 'none')
+            $mktResultCont.css('background-image', `url(${imgArr[Math.floor(Math.random() * imgArr.length)]})`)
 
             if (currentArtIndex > 1) {
               currentArtIndex--
