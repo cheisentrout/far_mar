@@ -192,6 +192,11 @@ a {
   width: 25%;
 }
 
+iframe {
+  border-color: #557570;
+  border-style: solid;
+}
+
 ul {
   list-style-type: none;
   padding: 0;
@@ -216,10 +221,11 @@ li {
   #mkt-specs {
     display: flex;
     flex-flow: row wrap;
+    justify-content: space-around;
   }
 
 h2 {
-    width: 50%;
+    width: 45%;
     text-align: left;
   }
 

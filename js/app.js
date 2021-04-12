@@ -22,6 +22,7 @@ $(() => { //BEGIN window.onload
     $mktResultCont.children().remove()
     $('.mkt-num').remove()
     $mktSpecs.empty()
+    $mktSpecs.hide()
     $('#clear').show()
 
     //store the user's input in a variable
@@ -166,10 +167,13 @@ $(() => { //BEGIN window.onload
               //   .attr('target', `${$mktDetails.GoogleLink}`)
               //   .addClass('mkt-specs')
                 console.log($mktDetails.GoogleLink);
+              const googleSearch = $mktDetails.Address.split(' ').join('+')
+              console.log(googleSearch);
               const $map = $('<iframe>')
-              .attr('src', `src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCpOYsYQDi7AYlherWrBKR7rhDZT86L1Fc
-    &q=${$mktDetails.address}">`)
-              .css({'width': '400px', 'height': '250px'})
+                .attr('src', "https://www.google.com/maps/embed/v1/place?q=place_id:ChIJCzYy5IS16lQRQrfeQ5K5Oxw&key=AIzaSyCpOYsYQDi7AYlherWrBKR7rhDZT86L1Fc")
+              // .attr('src', `https://www.google.com/maps/embed/v1/place?key=AIzaSyCpOYsYQDi7AYlherWrBKR7rhDZT86L1Fc
+              // &q=${googleSearch}>`)
+              .css({'width': '100%', 'height': '250px'})
               const $prodList = $('<ul>')
                 .addClass('mkt-specs')
               const splitProducts = $mktDetails.Products.split(';')
@@ -223,8 +227,6 @@ $(() => { //BEGIN window.onload
   })
 
 }) //END window.onload
-
-
 
 
 /*======================================================
