@@ -161,7 +161,7 @@ $(() => { //BEGIN window.onload
               const $prodList = $('<ul>')
                 .addClass('mkt-specs')
               const splitProducts = $mktDetails.Products.split(';')
-              console.log(splitProducts);
+              console.log($mktDetails.GoogleLink);
               for (let i = 0; i < splitProducts.length; i++) {
                 const $product = $('<li>').html(splitProducts[i]).addClass('mkt-specs')
                 $prodList.append($product)
@@ -186,19 +186,16 @@ $(() => { //BEGIN window.onload
             () => {
               console.log('request did not work');
             }
-          )
-
-        })
-
+          ) //end SECOND ".then"
+        }) //end mktName on click
       },
       () => {
         console.log('request did not work');
       }
-    )
-  })
+    ) //end FIRST .then
+  }) //end searchBar on click
 
   $('#clear').on('click', (event) => {
-    // console.log('clear was clicked');
     $('.mkt-num').remove()
     $('.mkt-article').remove()
     $('i').remove()
