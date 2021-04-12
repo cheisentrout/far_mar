@@ -19,6 +19,7 @@ $(() => { //BEGIN window.onload
     event.preventDefault()
     $mktResultCont.children().remove()
     $('.mkt-num').remove()
+    $mktSpecs.empty()
 
     //store the user's input in a variable
     const $userZip = $('#search-bar').val()
@@ -134,10 +135,10 @@ $(() => { //BEGIN window.onload
         $('.mkt-result').on('click', (event) => {
           console.log(event);
           //first, remove any market specs that already populate the page (from a previous search)
-          $('#mkt-specs').children().remove()
+          // $('#mkt-specs').children().remove()
+          // $mktSpecs.empty()
           //store the event's current target in a variable
           const $mktName = $(event.currentTarget)
-          console.log($(event.currentTarget).attr('id'));
           //store the currentTarget's id as a variable
           const $mktID = $(event.currentTarget).attr('id')
           console.log($mktID);
@@ -147,6 +148,7 @@ $(() => { //BEGIN window.onload
           }).then(
             (data) => {
               // console.log(data);
+              $mktSpecs.show()
               const $mktDetails = data.marketdetails
               // console.log($mktDetails);
               const $address = $('<p>')
@@ -158,6 +160,9 @@ $(() => { //BEGIN window.onload
                 .attr('href', `${$mktDetails.GoogleLink}`)
                 .attr('target', `${$mktDetails.GoogleLink}`)
                 .addClass('mkt-specs')
+              // const $map = $('<object>')
+              //   .attr('data', `${$mktDetails.GoogleLink}`)
+              //   .css({'width': '50%', 'height': 'auto'})
               const $prodList = $('<ul>')
                 .addClass('mkt-specs')
               const splitProducts = $mktDetails.Products.split(';')
@@ -181,6 +186,7 @@ $(() => { //BEGIN window.onload
               $mktSpecs.append($schedule)
               $mktSpecs.append($map)
               $mktSpecs.append($prodList)
+              console.log(`Got to the bottom of the details function.`);
               // $mktSpecs.append($products)
             },
             () => {
@@ -203,7 +209,8 @@ $(() => { //BEGIN window.onload
     $('.mkt-article').remove()
     $('i').remove()
     $('.mkt-specs').remove()
-    $('#mkt-specs').remove()
+    $mktSpecs.empty()
+    $mktSpecs.hide()
     $pageHeader.removeClass('with-results')
   })
 
