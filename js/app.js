@@ -41,10 +41,6 @@ $(() => { //BEGIN window.onload
         console.log(data);
         //Data is returned in an object, so I created a variable to store the array of objects within the "results" key, which the data returns.
         const resArr = data.results
-
-        // //element that will display total number of markets near userZip:
-        // const $carItemNum = $('<h3>').html(`There are ${resArr.length} markets near zipcode ${$userZip}!`).addClass('mkt-num')
-
         const idArr = []
 
           //for the length of the resArr, do the following:
@@ -79,17 +75,13 @@ $(() => { //BEGIN window.onload
           }
 
           console.log(`ID array outside of for loop: ${idArr}`);
-//Here, something that scans through the array of market ids and only runs the following so long as the id doesn't return "error"?
-//element that will display total number of markets near userZip:
 
+        //element that will display total number of markets near userZip:
         const $carItemNum = $('<h3>').html(`There are ${resArr.length} markets near zipcode       ${$userZip}!`).addClass('mkt-num')
         const $nextArrow = $('<i>').addClass("fas fa-long-arrow-alt-right")
         const $prevArrow = $('<i>').addClass("fas fa-long-arrow-alt-left")
 
         if (idArr.includes("Error") === false) {
-          // const $carItemNum = $('<h3>').html(`There are ${resArr.length} markets near zipcode ${$userZip}!`).addClass('mkt-num')
-          // const $nextArrow = $('<i>').addClass("fas fa-long-arrow-alt-right")
-          // const $prevArrow = $('<i>').addClass("fas fa-long-arrow-alt-left")
           $mktResSummary.append($carItemNum)
           $('#mktname-results').prepend($prevArrow).append($nextArrow)
         }
@@ -113,7 +105,6 @@ $(() => { //BEGIN window.onload
               currentArtIndex = 1
             }
 
-            // $('#mktname-results').children().eq(currentArtIndex).css('display', 'block')
             $('#mktname-results').children().eq(currentArtIndex).css({'display': 'flex', 'align-items': 'center', 'justify-content': 'center'})
 
           })
@@ -131,7 +122,6 @@ $(() => { //BEGIN window.onload
 
             $('#mktname-results').children().eq(currentArtIndex).css({'display': 'flex', 'align-items': 'center', 'justify-content': 'center'})
 
-
           })
 
       /*======== MARKET NAME ON CLICK ========*/
@@ -139,20 +129,18 @@ $(() => { //BEGIN window.onload
         $('.mkt-result').on('click', (event) => {
           console.log(event)
           //first, remove any market specs that already populate the page (from a previous search)
-          // $('#mkt-specs').children().remove()
           $mktSpecs.empty()
           //store the event's current target in a variable
           const $mktName = $(event.currentTarget)
-          console.log($(event.currentTarget));
           //store the currentTarget's id as a variable
           const $mktID = $(event.currentTarget).attr('id')
-          console.log($mktID);
+
           $.ajax({
             //query the API for the market id assigned to the event target
             url: `https://search.ams.usda.gov/farmersmarkets/v1/data.svc/mktDetail?id=${$mktID}`
           }).then(
             (data) => {
-              // console.log(data);
+              console.log(data);
               $mktSpecs.show()
               const $mktDetails = data.marketdetails
               // console.log($mktDetails)
@@ -161,27 +149,34 @@ $(() => { //BEGIN window.onload
                 .html($mktDetails.Address)
                 .attr('id', 'address')
                 .addClass('mkt-specs')
-              // const $map = $('<a>')
-              //   .html(`Find on Google Maps`)
-              //   .attr('href', `${$mktDetails.GoogleLink}`)
-              //   .attr('target', `${$mktDetails.GoogleLink}`)
-              //   .addClass('mkt-specs')
+              const $mapLink = $('<a>')
+                .html(`Find on Google Maps`)
+                .attr('href', `${$mktDetails.GoogleLink}`)
+                .attr('target', `${$mktDetails.GoogleLink}`)
+                .addClass('mkt-specs')
                 console.log($mktDetails.GoogleLink);
               const googleSearch = $mktDetails.Address.split(' ').join('+')
               console.log(googleSearch);
+              // $.ajax({
+              //   url: `https://www.google.com/maps/embed/v1/place?key=AIzaSyCpOYsYQDi7AYlherWrBKR7rhDZT86L1Fc&q=${googleSearch}>`
+              // }).then(
+              //   (data) => {
+              //     console.log(data);
+              //   }
+              // )
               const $map = $('<iframe>')
                 .attr('src', "https://www.google.com/maps/embed/v1/place?q=place_id:ChIJCzYy5IS16lQRQrfeQ5K5Oxw&key=AIzaSyCpOYsYQDi7AYlherWrBKR7rhDZT86L1Fc")
-              // .attr('src', `https://www.google.com/maps/embed/v1/place?key=AIzaSyCpOYsYQDi7AYlherWrBKR7rhDZT86L1Fc
-              // &q=${googleSearch}>`)
               .css({'width': '100%', 'height': '250px'})
+
+              const $prodHeader = $('<h4>').html(`This market carries the following products!`)
               const $prodList = $('<ul>')
                 .addClass('mkt-specs')
               const splitProducts = $mktDetails.Products.split(';')
-              // console.log(splitProducts);
               for (let i = 0; i < splitProducts.length; i++) {
-                const $product = $('<li>').html(splitProducts[i]).addClass('mkt-specs')
+                const $product = $('<li>').html(splitProducts[i]).addClass('mkt-specs').addClass('list-item')
                 $prodList.append($product)
               }
+              const $prodChooser = $('<h4>').html(`Select a product to see other markets in your area that carry similar items.`)
               const $schedule = $('<p>')
                 .html($mktDetails.Schedule)
                 .addClass('mkt-specs')
@@ -192,27 +187,45 @@ $(() => { //BEGIN window.onload
 
               $addAndSchedCont.append($address)
               $addAndSchedCont.append($schedule)
+              $addAndSchedCont.append($mapLink)
               $mktSpecs.css({'background-color': '#D6DCD8', 'padding': '20px'})
               $mktSpecs.append($mktNameHeader)
               $mktSpecs.append($addAndSchedCont)
               $mktSpecs.append($map)
+              $mktSpecs.append($prodHeader)
               $mktSpecs.append($prodList)
-              console.log(`Got to the bottom of the details function.`);
-              // $mktSpecs.append($products)
+              $mktSpecs.append($prodChooser)
+
+              const numOfProducts = $('.list-item')
+              console.log(numOfProducts);
+              const productArr = []
+
+              // console.log(productArr);
+              for (let i = 0; i < numOfProducts.length; i++) {
+                // productArr.push($('ul').children().eq(i).html())
+                productArr.push($('ul').children().eq(i))
+                // console.log($('ul').children().eq(i).html());
+              }
+              console.log(productArr);
+              for (let i = 0; i < productArr.length; i++) {
+                productArr[i].on('click', (event) => {
+                  console.log(`Product ${productArr[i].html()} was clicked.`);
+                  console.log(resArr);
+                })
+              }
+
             },
             () => {
               console.log('request did not work');
             }
-          )
-
-        })
-
+          ) //end second AJAX request (Market details)
+        }) // end mktName click listener
       },
       () => {
         console.log('request did not work');
       }
-    )
-  })
+    ) // end first AJAX request (market by zip)
+  }) // end SUBMIT click listener
 
   $('#clear').on('click', (event) => {
     // console.log('clear was clicked');

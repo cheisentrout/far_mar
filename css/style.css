@@ -190,11 +190,19 @@ h2 {
 
 a {
   width: 25%;
+  color: #557570;
+  text-decoration: none;
+  transition: .3s;
+}
+
+a:hover {
+  color: #CE7E5D;
 }
 
 iframe {
   border-color: #557570;
   border-style: solid;
+  margin: 15px auto;
 }
 
 ul {
@@ -211,6 +219,13 @@ li {
   color: #D6DCD8;
   padding: 8px;
   border-radius: 10px;
+  transition: .1s;
+}
+
+li:hover {
+  background-color: #D39A89;
+  /* color: #557570; */
+  transform: scale(1.03);
 }
 
 /* TABLET STYLES */
