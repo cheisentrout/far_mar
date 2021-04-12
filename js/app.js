@@ -28,7 +28,7 @@ $(() => { //BEGIN window.onload
 
     $.ajax({
       //Query the API based on the zipcode input by the user
-      url: `http://search.ams.usda.gov/farmersmarkets/v1/data.svc/zipSearch?zip=${$userZip}`
+      url: `https://search.ams.usda.gov/farmersmarkets/v1/data.svc/zipSearch?zip=${$userZip}`
 
     }).then(
       (data) => {
@@ -144,7 +144,7 @@ $(() => { //BEGIN window.onload
           console.log($mktID);
           $.ajax({
             //query the API for the market id assigned to the event target
-            url: `http://search.ams.usda.gov/farmersmarkets/v1/data.svc/mktDetail?id=${$mktID}`
+            url: `https://search.ams.usda.gov/farmersmarkets/v1/data.svc/mktDetail?id=${$mktID}`
           }).then(
             (data) => {
               // console.log(data);
