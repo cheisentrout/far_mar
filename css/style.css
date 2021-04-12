@@ -12,7 +12,7 @@ body {
 h1 {
   color: #D6DCD8;
   font-family: 'dancing script';
-  font-size: 4em;
+  font-size: 5em;
 }
 
 input, button {
@@ -20,12 +20,16 @@ input, button {
   letter-spacing: .05em;
 }
 
+.animate__animated.animate__fadeIn {
+  --animate-duration: 3s;
+}
+
 /*---------- MOBILE STYLES ----------*/
 
 /* HEADER - logo + slogan */
 
 header {
-  margin-top: 200px;
+  margin-top: 150px;
   transition: .8s ease;
 }
 
@@ -185,7 +189,7 @@ h2 {
 }
 
 a {
-  width: 75%;
+  width: 25%;
 }
 
 ul {
@@ -202,4 +206,25 @@ li {
   color: #D6DCD8;
   padding: 8px;
   border-radius: 10px;
+}
+
+/* TABLET STYLES */
+
+@media only screen and (min-width: 768px) {
+
+  /* Market Specs Section */
+  #mkt-specs {
+    display: flex;
+    flex-flow: row wrap;
+  }
+
+h2 {
+    width: 50%;
+  }
+
+  .addAndSched {
+    width: 40%;
+    margin: 20px 0 0 10px;
+  }
+
 }

@@ -180,10 +180,13 @@ $(() => { //BEGIN window.onload
               const $mktNameHeader = $('<h2>')
                 .html($mktName.html())
                 .addClass('mkt-specs')
+              const $addAndSchedCont = $('<div>').attr('id', 'addAndSched').addClass('addAndSched')
+
+              $addAndSchedCont.append($address)
+              $addAndSchedCont.append($schedule)
               $mktSpecs.css({'background-color': '#D6DCD8', 'padding': '20px'})
               $mktSpecs.append($mktNameHeader)
-              $mktSpecs.append($address)
-              $mktSpecs.append($schedule)
+              $mktSpecs.append($addAndSchedCont)
               $mktSpecs.append($map)
               $mktSpecs.append($prodList)
               console.log(`Got to the bottom of the details function.`);
