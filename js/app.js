@@ -136,7 +136,7 @@ $(() => { //BEGIN window.onload
           console.log(event);
           //first, remove any market specs that already populate the page (from a previous search)
           // $('#mkt-specs').children().remove()
-          // $mktSpecs.empty()
+          $mktSpecs.empty()
           //store the event's current target in a variable
           const $mktName = $(event.currentTarget)
           //store the currentTarget's id as a variable
