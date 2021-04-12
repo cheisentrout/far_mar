@@ -1,12 +1,5 @@
-console.log('app.js hooked up');
-console.log($);
-
-// let $zip = '48103'
-// let zip = $('input[type="text"]').val()
-// let id = 1020005
-// console.log(zip);
-// const $searchBar = $('#search-bar').html('test')
-// console.log($searchBar);
+// console.log('app.js hooked up');
+// console.log($);
 
 $(() => { //BEGIN window.onload
 
@@ -25,7 +18,7 @@ $(() => { //BEGIN window.onload
 
     event.preventDefault()
     $mktResultCont.children().remove()
-    // $mktResSummary.remove()
+    $('.mkt-num').remove()
 
     //store the user's input in a variable
     const $userZip = $('#search-bar').val()
@@ -39,66 +32,64 @@ $(() => { //BEGIN window.onload
     }).then(
       (data) => {
 
-        // $('body').addClass('with-results')
-        // $pageHeader.addClass('with-results')
-        $('header').addClass('with-results')
+        // $('header').addClass('with-results')
         console.log(data);
-        //Data is returned in an object, so I created a variable to store the arrays within the "results" key, which the data returns.
+        //Data is returned in an object, so I created a variable to store the array of objects within the "results" key, which the data returns.
         const resArr = data.results
-        // if (resArr.marketname !== "Didn't find that zip code.") {
-        //   const $carItemNum = $('<h3>').html(`There are ${resArr.length} markets near zipcode ${$userZip}!`).addClass('mkt-num')
-        //   $mktResSummary.append($carItemNum)
-        const $carItemNum = $('<h3>').html(`There are ${resArr.length} markets near zipcode ${$userZip}!`).addClass('mkt-num')
-        //THIS LINE NEEDS ATTN: currently appending even if zip is not recognized
-          $mktResSummary.append($carItemNum)
 
+        // //element that will display total number of markets near userZip:
+        // const $carItemNum = $('<h3>').html(`There are ${resArr.length} markets near zipcode ${$userZip}!`).addClass('mkt-num')
+
+        const idArr = []
 
           //for the length of the resArr, do the following:
           for (let i = 0; i < resArr.length; i++) {
             //create an article for each result that's returned
 
-            if (resArr[i].marketname !== "Didn't find that zip code.") {
+            if (resArr[i].id !== "Error") {
 
+              $('header').addClass('with-results')
               const $mktArt = $('<article>').addClass('mkt-article')
-
-              // $mktResultCont.css('background-image', `url(${imgArr[Math.floor(Math.random() * imgArr.length)]})`)
 
               const mktNameWithNum = resArr[i].marketname
               const mktNameNoNum = mktNameWithNum.split(' ').slice(1).join(' ')
 
-            //create an h3 that will have the text of the marketname key from the results array - give each the class of 'market-result'
-            // if (resArr[i].marketname !== "Didn't find that zip code.") {
+              //create an h3 that will have the text of the marketname key from the results array - give each the class of 'market-result'
               const $mktName = $('<h3>').html(mktNameNoNum).addClass('mkt-result')
               //Store the result array key ID in a variable
               const $mktID = resArr[i].id
+              idArr.push($mktID)
+              // console.log(`The array of market id's is: ${idArr}.`);
               //Add the value of the ID key to the marketName element as an ID
               $mktName.attr('id', `${$mktID}`)
-              // $mktResultCont.attr('id', `${$mktID}`)
               $mktArt.append($mktName)
-              // $mktArt.append($mktImg)
               $mktResultCont.append($mktArt)
               $mktResultCont.css('background-image', `url(${imgArr[Math.floor(Math.random() * imgArr.length)]})`)
             // }
             } else {
-            alert(`We didn't recognize the zip code ${$userZip}. Please try a different zip code.`)
+              idArr.push(resArr[i].id)
+              console.log(idArr);
+              alert(`We didn't recognize the zip code ${$userZip}. Please try a different zip code.`)
             }
           }
-          // const $mktImg = $('<img>').attr('src', `${imgArr[Math.floor(Math.random() * imgArr.length`)]}`)
-          // //Store the result array key ID in a variable
-          // const $mktID = resArr[i].id
-          // //Add the value of the ID key to the marketName element as an ID
-          // $mktName.attr('id', `${$mktID}`)
-          // // $mktResultCont.attr('id', `${$mktID}`)
-          // $mktArt.append($mktName)
-          // // $mktArt.append($mktImg)
-          // $mktResultCont.append($mktArt)
-          // $mktResultCont.css('background-image', `url(${imgArr[Math.floor(Math.random() * imgArr.length)]})`)
-        // }
-          const $nextArrow = $('<i>').addClass("fas fa-long-arrow-alt-right")
-          const $prevArrow = $('<i>').addClass("fas fa-long-arrow-alt-left")
-          $('#mktname-results').prepend($prevArrow).append($nextArrow)
 
-          //VARs for carousel function:
+          console.log(`ID array outside of for loop: ${idArr}`);
+//Here, something that scans through the array of market ids and only runs the following so long as the id doesn't return "error"?
+//element that will display total number of markets near userZip:
+
+        const $carItemNum = $('<h3>').html(`There are ${resArr.length} markets near zipcode       ${$userZip}!`).addClass('mkt-num')
+        const $nextArrow = $('<i>').addClass("fas fa-long-arrow-alt-right")
+        const $prevArrow = $('<i>').addClass("fas fa-long-arrow-alt-left")
+
+        if (idArr.includes("Error") === false) {
+          // const $carItemNum = $('<h3>').html(`There are ${resArr.length} markets near zipcode ${$userZip}!`).addClass('mkt-num')
+          // const $nextArrow = $('<i>').addClass("fas fa-long-arrow-alt-right")
+          // const $prevArrow = $('<i>').addClass("fas fa-long-arrow-alt-left")
+          $mktResSummary.append($carItemNum)
+          $('#mktname-results').prepend($prevArrow).append($nextArrow)
+        }
+
+          /*====== CAROUSEL OF MARKETS ======*/
           //currentIndex has to start at 1 so that it doesn't include the previous arrow
           let currentArtIndex = 1;
           //last index has to subtract 2 so that it doesn't include the next arrow
@@ -218,6 +209,20 @@ $(() => { //BEGIN window.onload
 
 }) //END window.onload
 
+
+/*======================================================
+-------------------------------------------------------
+PROGRAM NOTES AND ATTEMPTS BELOW
+-------------------------------------------------------
+=======================================================*/
+
+// let $zip = '48103'
+// let zip = $('input[type="text"]').val()
+// let id = 1020005
+// console.log(zip);
+// const $searchBar = $('#search-bar').html('test')
+// console.log($searchBar);
+
 /*======= BELOW QUERY WORKS returns marketDetails by spec. ID ========*/
 // $.ajax({
 //   url: "http://search.ams.usda.gov/farmersmarkets/v1/data.svc/mktDetail?id=" + id,
@@ -270,3 +275,27 @@ $(() => { //BEGIN window.onload
 //query by zip
 
           // console.log(`${resArr[i].marketname}'s ID is: ${$marketName.attr('id')}`);
+
+/* Trying to account for unrecognized zips */
+
+//   if (resArr[i].id = "Error") {
+//     alert(`We didn't recognize the zip code ${$userZip}. Please try a different zip code.`)
+//   } else {
+//     const $mktArt = $('<article>').addClass('mkt-article')
+//
+//     const mktNameWithNum = resArr[i].marketname
+//     const mktNameNoNum = mktNameWithNum.split(' ').slice(1).join(' ')
+//
+//     //create an h3 that will have the text of the marketname key from the results array - give each the class of 'market-result'
+//     const $mktName = $('<h3>').html(mktNameNoNum).addClass('mkt-result')
+//     //Store the result array key ID in a variable
+//     const $mktID = resArr[i].id
+//     idArr.push($mktID)
+//     console.log(idArr);
+//     //Add the value of the ID key to the marketName element as an ID
+//     $mktName.attr('id', `${$mktID}`)
+//     $mktArt.append($mktName)
+//     $mktResultCont.append($mktArt)
+//     $mktResultCont.css('background-image', `url(${imgArr[Math.floor(Math.random() * imgArr.length)]})`)
+//   }
+// }
