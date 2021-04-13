@@ -140,6 +140,7 @@ $(() => { //BEGIN window.onload
             url: `https://search.ams.usda.gov/farmersmarkets/v1/data.svc/mktDetail?id=${$mktID}`
           }).then(
             (data) => {
+              console.log(`LOCAL MARKET DETAILS DATA:`);
               console.log(data);
               $mktSpecs.show()
               const $mktDetails = data.marketdetails
@@ -198,21 +199,73 @@ $(() => { //BEGIN window.onload
 
               const numOfProducts = $('.list-item')
               console.log(numOfProducts);
-              const productArr = []
+              // const productArr = []
 
               // console.log(productArr);
-              for (let i = 0; i < numOfProducts.length; i++) {
-                // productArr.push($('ul').children().eq(i).html())
-                productArr.push($('ul').children().eq(i))
-                // console.log($('ul').children().eq(i).html());
-              }
-              console.log(productArr);
-              for (let i = 0; i < productArr.length; i++) {
-                productArr[i].on('click', (event) => {
-                  console.log(`Product ${productArr[i].html()} was clicked.`);
-                  console.log(resArr);
-                })
-              }
+              // for (let i = 0; i < numOfProducts.length; i++) {
+              //   // productArr.push($('ul').children().eq(i).html())
+              //   productArr.push($('ul').children().eq(i))
+              //   // console.log($('ul').children().eq(i).html());
+              // }
+              // console.log(productArr);
+              // for (let i = 0; i < productArr.length; i++) {
+              //   productArr[i].on('click', (event) => {
+              //     console.log(`Product ${productArr[i].html()} was clicked.`);
+              //     console.log(resArr); //we can use the first result array here
+              //     console.log(resArr[i].id); //each time the loop runs, it logs one local market id
+              //
+              //   })
+              // }
+              $('ul').on('click', (event) => {
+                // console.log($(event.currentTarget));
+                console.log($(event.target));
+                // const prodHTML = $(event.target).html().split(' ').join(' ')
+                const prodHTML = $(event.target).html().substring(1)
+                // console.log(`If a space shows up here, that's bad:${prodHTML}`);
+                console.log(prodHTML);
+                console.log(typeof prodHTML);
+                const withQuotes = `"${prodHTML}"`
+                console.log(withQuotes);
+                console.log(resArr);
+                // const productArr = []
+                for (let i = 0; i < resArr.length; i++) {
+                  // console.log(`Market IDs for this zip: ${resArr[i].id}`);
+                  $.ajax({
+                    //query the API for the market id assigned to the event target
+                    url: `https://search.ams.usda.gov/farmersmarkets/v1/data.svc/mktDetail?id=${resArr[i].id}`
+                  }).then(
+                    (data) => {
+                      console.log(data); //returns local marketdetails as objects
+                      // console.log(data.marketdetails.Products);
+                      // console.log($(event.target).html());
+                      const products = data.marketdetails.Products.split("; ")
+                      // console.log(`Products available at ${resArr[i].marketname}: ${products}`);
+                      const productArr = [] //start with an empty array each time, so that it's fresh for each specific market check
+                      productArr.push(products)
+                      // console.log(`Product array for market ${resArr[i].marketname}:`);
+                      // console.log(productArr);
+                      console.log(productArr[0]);
+                      if (productArr[0].includes(prodHTML)) {
+                        console.log(`We've got a match! ${resArr[i].marketname} also carries ${prodHTML}.`);
+                      } else {
+                        console.log(`${resArr[i].marketname} does not carry ${prodHTML}`);
+                      }
+                      //try changing j to i and remove the extra for loop?
+
+                      // for (let j = 0; j < productArr[0].length; j++) {
+                      //   console.log(`The market we're checking is ${resArr[i].marketname}.`);
+                      //   console.log(`Clicked product: ${prodHTML}`);
+                      //   console.log(productArr[0][j]);
+                      //   if (productArr[0][j] === prodHTML) {
+                      //     console.log(`We've got a match! ${resArr[i].marketname} also carries ${prodHTML}.`);
+                      //   } else {
+                      //     console.log("No match.");
+                      //   }
+                      // }
+                    }
+                  ) //end .then()
+                } //end result array for loop
+              }) //end ul on click
 
             },
             () => {
