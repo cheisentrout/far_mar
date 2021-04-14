@@ -1,6 +1,3 @@
-// console.log('app.js hooked up');
-// console.log($);
-
 $(() => { //BEGIN window.onload
 
   $('#clear').hide()
@@ -73,8 +70,6 @@ $(() => { //BEGIN window.onload
               alert(`We didn't recognize the zip code ${$userZip}. Please try a different zip code.`)
             }
           }
-
-          console.log(`ID array outside of for loop: ${idArr}`);
 
         //element that will display total number of markets near userZip:
         const $carItemNum = $('<h3>').html(`There are ${resArr.length} markets near zipcode       ${$userZip}!`).addClass('mkt-num')
@@ -197,35 +192,19 @@ $(() => { //BEGIN window.onload
               $mktSpecs.append($prodList)
               $mktSpecs.append($prodChooser)
 
-              const numOfProducts = $('.list-item')
-              console.log(numOfProducts);
-              // const productArr = []
+              // const numOfProducts = $('.list-item')
+              // console.log(numOfProducts);
 
-              // console.log(productArr);
-              // for (let i = 0; i < numOfProducts.length; i++) {
-              //   // productArr.push($('ul').children().eq(i).html())
-              //   productArr.push($('ul').children().eq(i))
-              //   // console.log($('ul').children().eq(i).html());
-              // }
-              // console.log(productArr);
-              // for (let i = 0; i < productArr.length; i++) {
-              //   productArr[i].on('click', (event) => {
-              //     console.log(`Product ${productArr[i].html()} was clicked.`);
-              //     console.log(resArr); //we can use the first result array here
-              //     console.log(resArr[i].id); //each time the loop runs, it logs one local market id
-              //
-              //   })
-              // }
               $('ul').on('click', (event) => {
                 // console.log($(event.currentTarget));
                 console.log($(event.target));
                 // const prodHTML = $(event.target).html().split(' ').join(' ')
                 const prodHTML = $(event.target).html().substring(1)
                 // console.log(`If a space shows up here, that's bad:${prodHTML}`);
-                console.log(prodHTML);
-                console.log(typeof prodHTML);
-                const withQuotes = `"${prodHTML}"`
-                console.log(withQuotes);
+                // console.log(prodHTML);
+                // console.log(typeof prodHTML);
+                // const withQuotes = `"${prodHTML}"`
+                // console.log(withQuotes);
                 console.log(resArr);
                 // const productArr = []
                 for (let i = 0; i < resArr.length; i++) {
@@ -238,7 +217,7 @@ $(() => { //BEGIN window.onload
                       console.log(data); //returns local marketdetails as objects
                       // console.log(data.marketdetails.Products);
                       // console.log($(event.target).html());
-                      const products = data.marketdetails.Products.split("; ")
+                      const products = data.marketdetails.Products.split(";\ ") //try a backslash before space
                       // console.log(`Products available at ${resArr[i].marketname}: ${products}`);
                       const productArr = [] //start with an empty array each time, so that it's fresh for each specific market check
                       productArr.push(products)
@@ -250,18 +229,6 @@ $(() => { //BEGIN window.onload
                       } else {
                         console.log(`${resArr[i].marketname} does not carry ${prodHTML}`);
                       }
-                      //try changing j to i and remove the extra for loop?
-
-                      // for (let j = 0; j < productArr[0].length; j++) {
-                      //   console.log(`The market we're checking is ${resArr[i].marketname}.`);
-                      //   console.log(`Clicked product: ${prodHTML}`);
-                      //   console.log(productArr[0][j]);
-                      //   if (productArr[0][j] === prodHTML) {
-                      //     console.log(`We've got a match! ${resArr[i].marketname} also carries ${prodHTML}.`);
-                      //   } else {
-                      //     console.log("No match.");
-                      //   }
-                      // }
                     }
                   ) //end .then()
                 } //end result array for loop
