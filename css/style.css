@@ -230,8 +230,29 @@ li:hover {
 
 /* PRODUCT MATCH STYLES */
 
+#match-container {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  overflow: auto;
+}
+
 .mktMatch {
   color: #CE7E5D;
+  background-color: whitesmoke;
+  padding: 10px;
+  width: 30%;
+  margin: 25px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.flip-card {
+  transform: rotateY(180deg);
+  background-color: pink;
+  /* position: absolute;
+  backface-visibility: hidden; */
 }
 
 /* TABLET STYLES */

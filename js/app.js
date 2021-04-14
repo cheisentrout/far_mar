@@ -209,21 +209,21 @@ $(() => { //BEGIN window.onload
               })
 
               $('ul').on('click', (event) => {
-                // console.log($(event.currentTarget));
-                // console.log($(event.target));
 
-                //need to add a conditional here: if substring(1) == " "
-                // if ($(event.target).html().substring(1) === ' ') {
-                //   const prodHTML = $(event.target).html().substring(1)
-                // } else {
-                //   const prodHTML = $(event.target).html()
-                // }
                 $('.mktMatch').remove()
-                const prodHTML = $(event.target).html().substring(1)
-                console.log(prodHTML);
+                $('#match-container').remove()
 
-                const $matchHeader = $('<p>').html(`Nice! These markets also carry ${prodHTML}:`).addClass('mktMatch')
+                const charArr = Array.from($(event.target).html().split(" "))
+
+                if (charArr[0] === "") {
+                  charArr.shift()
+                }
+                const prodHTML = charArr.join(' ')
+
+                const $matchHeader = $('<p>').html(`Nice! These markets also carry ${prodHTML}:`).addClass('mktMatch').css({'width': '100%', 'background-color': 'inherit', 'justify-content': 'center', 'max-width': '580px'})
+                const $matchCont = $('<div>').attr('id', 'match-container')
                 $mktSpecs.append($matchHeader)
+                $mktSpecs.append($matchCont)
 
 
                 for (let i = 0; i < resArr.length; i++) {
@@ -240,10 +240,13 @@ $(() => { //BEGIN window.onload
                       //something here so it doesn't display current market selection
                       if (productArr[0].includes(prodHTML)) {
                         // console.log(`We've got a match! ${resArr[i].marketname} also carries ${prodHTML}.`);
-                        // const $matchHeader = $('<p>').html(`Nice! These markets also carry ${prodHTML}:`).addClass('mktMatch')
                         const $mktMatch = $('<h3>').html(resArr[i].marketname.split(' ').slice(1).join(' ')).addClass('mktMatch')
+                        $mktMatch.on('click', (event) => {
+                          $mktMatch.toggleClass('flip-card')
+                        })
                         // $mktSpecs.append($matchHeader)
-                        $mktSpecs.append($mktMatch)
+                        $matchCont.append($mktMatch)
+                        // $mktSpecs.append($matchCont)
                       } else {
                         console.log(`${resArr[i].marketname} does not carry ${prodHTML}`);
                       }
@@ -271,7 +274,6 @@ $(() => { //BEGIN window.onload
   }) // end SUBMIT click listener
 
   $('#clear').on('click', (event) => {
-    // console.log('clear was clicked');
     $('.mkt-num').remove()
     $('.mkt-article').remove()
     $('i').remove()
