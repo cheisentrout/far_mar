@@ -214,7 +214,7 @@ $(() => { //BEGIN window.onload
                 }
                 const prodHTML = charArr.join(' ')
 
-                const $matchHeader = $('<p>').html(`Nice! These markets nearby also carry ${prodHTML.toLowerCase()}:`).attr('id', 'match-header').css({'background-color': 'inherit', 'justify-content': 'center', 'max-width': '580px'})
+                const $matchHeader = $('<p>').html(`Nice! These markets nearby also carry ${prodHTML.toLowerCase()}:`).attr('id', 'match-header').css({'background-color': 'inherit', 'justify-content': 'center'})
                 const $matchCont = $('<div>').attr('id', 'match-container')
                 $mktSpecs.append($matchHeader)
                 $mktSpecs.append($matchCont)

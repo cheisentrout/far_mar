@@ -9,9 +9,14 @@ body {
   font-family: 'quicksand';
   /* font-weight: lighter; */
   text-align: center;
-  /* display: flex;
-  align-items: center; */
+  display: flex;
+  justify-content: center;
 }
+
+.container {
+  width: 100%;
+}
+
 
 h1 {
   color: #D6DCD8;
@@ -296,6 +301,10 @@ li:hover {
 
   i {
     font-size: 4.2em;
+  }
+
+  #mktname-results {
+    justify-content: space-around;
   }
 
   /* Market Specs Section */
