@@ -72,7 +72,7 @@ $(() => { //BEGIN window.onload
           }
 
         //element that will display total number of markets near userZip:
-        const $carItemNum = $('<h3>').html(`There are ${resArr.length} markets near zipcode       ${$userZip}!`).addClass('mkt-num')
+        const $carItemNum = $('<h3>').html(`There are ${resArr.length} markets near zipcode ${$userZip}!`).addClass('mkt-num')
         const $nextArrow = $('<i>').addClass("fas fa-long-arrow-alt-right")
         const $prevArrow = $('<i>').addClass("fas fa-long-arrow-alt-left")
 
@@ -197,16 +197,22 @@ $(() => { //BEGIN window.onload
 
               $('ul').on('click', (event) => {
                 // console.log($(event.currentTarget));
-                console.log($(event.target));
-                // const prodHTML = $(event.target).html().split(' ').join(' ')
+                // console.log($(event.target));
+
+                //need to add a conditional here: if substring(1) == " "
+                // if ($(event.target).html().substring(1) === ' ') {
+                //   const prodHTML = $(event.target).html().substring(1)
+                // } else {
+                //   const prodHTML = $(event.target).html()
+                // }
+                $('.mktMatch').remove()
                 const prodHTML = $(event.target).html().substring(1)
-                // console.log(`If a space shows up here, that's bad:${prodHTML}`);
-                // console.log(prodHTML);
-                // console.log(typeof prodHTML);
-                // const withQuotes = `"${prodHTML}"`
-                // console.log(withQuotes);
-                console.log(resArr);
-                // const productArr = []
+                console.log(prodHTML);
+
+                const $matchHeader = $('<p>').html(`Nice! These markets also carry ${prodHTML}:`).addClass('mktMatch')
+                $mktSpecs.append($matchHeader)
+                
+
                 for (let i = 0; i < resArr.length; i++) {
                   // console.log(`Market IDs for this zip: ${resArr[i].id}`);
                   $.ajax({
@@ -215,17 +221,16 @@ $(() => { //BEGIN window.onload
                   }).then(
                     (data) => {
                       console.log(data); //returns local marketdetails as objects
-                      // console.log(data.marketdetails.Products);
-                      // console.log($(event.target).html());
-                      const products = data.marketdetails.Products.split(";\ ") //try a backslash before space
-                      // console.log(`Products available at ${resArr[i].marketname}: ${products}`);
+                      const products = data.marketdetails.Products.split("; ") //try a backslash before space
                       const productArr = [] //start with an empty array each time, so that it's fresh for each specific market check
                       productArr.push(products)
-                      // console.log(`Product array for market ${resArr[i].marketname}:`);
-                      // console.log(productArr);
-                      console.log(productArr[0]);
+                      //something here so it doesn't display current market selection
                       if (productArr[0].includes(prodHTML)) {
-                        console.log(`We've got a match! ${resArr[i].marketname} also carries ${prodHTML}.`);
+                        // console.log(`We've got a match! ${resArr[i].marketname} also carries ${prodHTML}.`);
+                        // const $matchHeader = $('<p>').html(`Nice! These markets also carry ${prodHTML}:`).addClass('mktMatch')
+                        const $mktMatch = $('<h3>').html(resArr[i].marketname.split(' ').slice(1).join(' ')).addClass('mktMatch')
+                        // $mktSpecs.append($matchHeader)
+                        $mktSpecs.append($mktMatch)
                       } else {
                         console.log(`${resArr[i].marketname} does not carry ${prodHTML}`);
                       }
