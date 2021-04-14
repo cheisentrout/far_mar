@@ -119,12 +119,20 @@ $(() => { //BEGIN window.onload
 
           })
 
+          scroll({
+            top: 450,
+            left: 0,
+            behavior: 'smooth'
+          })
+
       /*======== MARKET NAME ON CLICK ========*/
       //any element with the class mkt-result, do the following on click:
         $('.mkt-result').on('click', (event) => {
           console.log(event)
           //first, remove any market specs that already populate the page (from a previous search)
           $mktSpecs.empty()
+          // Window.scroll(600, 400)
+
           //store the event's current target in a variable
           const $mktName = $(event.currentTarget)
           //store the currentTarget's id as a variable
@@ -194,6 +202,11 @@ $(() => { //BEGIN window.onload
 
               // const numOfProducts = $('.list-item')
               // console.log(numOfProducts);
+              scroll({
+                top: 650,
+                left: 0,
+                behavior: 'smooth'
+              })
 
               $('ul').on('click', (event) => {
                 // console.log($(event.currentTarget));
@@ -211,7 +224,7 @@ $(() => { //BEGIN window.onload
 
                 const $matchHeader = $('<p>').html(`Nice! These markets also carry ${prodHTML}:`).addClass('mktMatch')
                 $mktSpecs.append($matchHeader)
-                
+
 
                 for (let i = 0; i < resArr.length; i++) {
                   // console.log(`Market IDs for this zip: ${resArr[i].id}`);
@@ -237,6 +250,11 @@ $(() => { //BEGIN window.onload
                     }
                   ) //end .then()
                 } //end result array for loop
+                scroll({
+                  top: 1600,
+                  left: 0,
+                  behavior: 'smooth'
+                })
               }) //end ul on click
 
             },
