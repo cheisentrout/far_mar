@@ -80,7 +80,7 @@ header p {
   background-color: #557570;
   color: #F0F1F2;
   border: none;
-  font-size: 1.2em;
+  font-size: 1em;
   transition: .5s;
   outline: none;
 }
@@ -159,13 +159,13 @@ i {
 }
 
 i:hover {
-  color: #F2AB6D;
+  color: #A2543D;
   /* border: 1px solid whitesmoke; */
   transform: scale(1.3)
 }
 
 i:active {
-  color: red;
+  color: #D39A89;
 }
 
 .to-top-btn i {
@@ -257,6 +257,10 @@ li:hover {
   overflow: auto;
 }
 
+#match-header {
+  margin: auto;
+}
+
 .mktMatch {
   color: #CE7E5D;
   background-color: whitesmoke;
@@ -286,6 +290,12 @@ li:hover {
 /*============= TABLET / DESKTOP STYLES =============*/
 
 @media only screen and (min-width: 768px) {
+
+  /* Icon Font Arrows */
+
+  i {
+    font-size: 4.2em;
+  }
 
   /* Market Specs Section */
   #mkt-specs {

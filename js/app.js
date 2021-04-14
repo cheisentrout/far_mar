@@ -76,12 +76,14 @@ $(() => { //BEGIN window.onload
           }
 
         //element that will display total number of markets near userZip:
-        const $carItemNum = $('<h3>').html(`There are ${resArr.length} markets near zipcode ${$userZip}!`).addClass('mkt-num')
+        const $carItemNum = $('<h3>').html(`There are ${resArr.length} markets near zip ${$userZip}!`).addClass('mkt-num')
+        const $mktNumExp = $('<p>').html(`Use the arrows to scroll through them, and click on any market to learn more about it.`).addClass('mkt-num')
         const $nextArrow = $('<i>').addClass("fas fa-long-arrow-alt-right").attr('id', 'next')
         const $prevArrow = $('<i>').addClass("fas fa-long-arrow-alt-left").attr('id', 'prev')
 
         if (idArr.includes("Error") === false) {
           $mktResSummary.append($carItemNum)
+          $mktResSummary.append($mktNumExp)
           $('#mktname-results').prepend($prevArrow).append($nextArrow)
         }
 
@@ -203,6 +205,7 @@ $(() => { //BEGIN window.onload
 
                 $('.mktMatch').remove()
                 $('#match-container').remove()
+                $('#match-header').remove()
 
                 const charArr = Array.from($(event.target).html().split(" "))
 
@@ -211,7 +214,7 @@ $(() => { //BEGIN window.onload
                 }
                 const prodHTML = charArr.join(' ')
 
-                const $matchHeader = $('<p>').html(`Nice! These markets nearby also carry ${prodHTML.toLowerCase()}:`).css({'width': '100%', 'background-color': 'inherit', 'justify-content': 'center', 'max-width': '580px'})
+                const $matchHeader = $('<p>').html(`Nice! These markets nearby also carry ${prodHTML.toLowerCase()}:`).attr('id', 'match-header').css({'background-color': 'inherit', 'justify-content': 'center', 'max-width': '580px'})
                 const $matchCont = $('<div>').attr('id', 'match-container')
                 $mktSpecs.append($matchHeader)
                 $mktSpecs.append($matchCont)
@@ -247,7 +250,7 @@ $(() => { //BEGIN window.onload
                   ) //end .then()
                 } //end result array for loop
                 scroll({
-                  top: 1600,
+                  top: 3000,
                   left: 0,
                   behavior: 'smooth'
                 })
