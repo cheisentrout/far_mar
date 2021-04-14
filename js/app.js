@@ -6,7 +6,6 @@ $(() => { //BEGIN window.onload
   /*====== GLOBAL VARS ======*/
 
   const googleKey = `AIzaSyBT9_mprou4lCaUHTuQNhvRCNM8hyim7LE`
-
   const $pageHeader = $('header')
   const $submit = $('#submit')
   const $mktResultCont = $('#mktname-results')
@@ -19,6 +18,7 @@ $(() => { //BEGIN window.onload
   $submit.on('click', (event) => {
 
     event.preventDefault()
+    //Set up the page: empty the div for market specifics, remove text related to market results, and reveal the clear and "to the top" buttons.
     $mktResultCont.children().remove()
     $('.mkt-num').remove()
     $mktSpecs.empty()
@@ -26,9 +26,9 @@ $(() => { //BEGIN window.onload
     $('#clear').show()
     $('#to-top-btn').show()
 
-    //store the user's input in a variable
+    //Store the zip from the user input!
     const $userZip = $('#search-bar').val()
-    //then reset the input field to blank
+    //Then immediately reset the input field to the placeholder text:
     $('#search-bar').val('')
 
     $.ajax({
@@ -37,50 +37,45 @@ $(() => { //BEGIN window.onload
 
     }).then(
       (data) => {
-
-        // $('header').addClass('with-results')
         console.log(data);
         //Data is returned in an object, so I created a variable to store the array of objects within the "results" key, which the data returns.
         const resArr = data.results
         const idArr = []
-
-          //for the length of the resArr, do the following:
+          //For the length of the resArr, do the following:
           for (let i = 0; i < resArr.length; i++) {
-            //create an article for each result that's returned
-
+            //First, filter out any results that don't have a functional name or market ID:
             if (resArr[i].id !== "Error") {
-
+              //With-results floats the header upwards on the page.
               $('header').addClass('with-results')
+              //Create an article tag for each market result
               const $mktArt = $('<article>').addClass('mkt-article')
-
+              //Remove the numbers returned before market names from the API
               const mktNameWithNum = resArr[i].marketname
               const mktNameNoNum = mktNameWithNum.split(' ').slice(1).join(' ')
-
-              //create an h3 that will have the text of the marketname key from the results array - give each the class of 'market-result'
+              //Create a heading for each marketname returned from the data
               const $mktName = $('<h3>').html(mktNameNoNum).addClass('mkt-result')
-              //Store the result array key ID in a variable
+              //Store the result array ID key in a variable
               const $mktID = resArr[i].id
               idArr.push($mktID)
-              // console.log(`The array of market id's is: ${idArr}.`);
-              //Add the value of the ID key to the marketName element as an ID
+              //Add the value of the ID key to the marketName element as an ID attribute
               $mktName.attr('id', `${$mktID}`)
               $mktArt.append($mktName)
               $mktResultCont.append($mktArt)
+              //Generate a random stock image for the background of the market carousel
               $mktResultCont.css('background-image', `url(${imgArr[Math.floor(Math.random() * imgArr.length)]})`)
             // }
             } else {
               idArr.push(resArr[i].id)
-              console.log(idArr);
               alert(`We didn't recognize the zip code ${$userZip}. Please try a different zip code.`)
             }
           }
 
-        //element that will display total number of markets near userZip:
+        //Create the element that will display the total number of markets near userZip:
         const $carItemNum = $('<h3>').html(`There are ${resArr.length} markets near zip ${$userZip}!`).addClass('mkt-num')
         const $mktNumExp = $('<p>').html(`Use the arrows to scroll through them, and click on any market to learn more about it.`).addClass('mkt-num')
         const $nextArrow = $('<i>').addClass("fas fa-long-arrow-alt-right").attr('id', 'next')
         const $prevArrow = $('<i>').addClass("fas fa-long-arrow-alt-left").attr('id', 'prev')
-
+        //If the idArr does NOT include an error... append these results to the page.
         if (idArr.includes("Error") === false) {
           $mktResSummary.append($carItemNum)
           $mktResSummary.append($mktNumExp)
@@ -92,7 +87,6 @@ $(() => { //BEGIN window.onload
           let currentArtIndex = 1;
           //last index has to subtract 2 so that it doesn't include the next arrow
           let lastIndex = $('#mktname-results').children().length - 2
-          // console.log(lastIndex);
 
           /*===== NEXT ARROW CLICK FCTN =======*/
           $nextArrow.on('click', (event) => {
@@ -124,7 +118,6 @@ $(() => { //BEGIN window.onload
             $('#mktname-results').children().eq(currentArtIndex).css({'display': 'flex', 'align-items': 'center', 'justify-content': 'center'})
 
           })
-
           scroll({
             top: 450,
             left: 0,
@@ -132,14 +125,12 @@ $(() => { //BEGIN window.onload
           })
 
       /*======== MARKET NAME ON CLICK ========*/
-      //any element with the class mkt-result, do the following on click:
+      //Listen to each market name, and on click, run the following:
         $('.mkt-result').on('click', (event) => {
           console.log(event)
-          //first, remove any market specs that already populate the page (from a previous search)
+          //First, remove any market specs that already populate the page (from a previous search)
           $mktSpecs.empty()
-          // Window.scroll(600, 400)
-
-          //store the event's current target in a variable
+          //Store the event's current target in a variable
           const $mktName = $(event.currentTarget)
           //store the currentTarget's id as a variable
           const $mktID = $(event.currentTarget).attr('id')
@@ -149,7 +140,7 @@ $(() => { //BEGIN window.onload
             url: `https://search.ams.usda.gov/farmersmarkets/v1/data.svc/mktDetail?id=${$mktID}`
           }).then(
             (data) => {
-              // console.log(data);
+              //Populate the DOM with the marketdetail information:
               $mktSpecs.show()
               const $mktDetails = data.marketdetails
               const $address = $('<p>')
@@ -206,7 +197,7 @@ $(() => { //BEGIN window.onload
                 $('.mktMatch').remove()
                 $('#match-container').remove()
                 $('#match-header').remove()
-
+                //Split up product strings into an array of characters - some begin with a space, and interfere with matching the html to other markets' product arrays.
                 const charArr = Array.from($(event.target).html().split(" "))
 
                 if (charArr[0] === "") {
@@ -219,43 +210,30 @@ $(() => { //BEGIN window.onload
                 $mktSpecs.append($matchHeader)
                 $mktSpecs.append($matchCont)
 
-
+                //Loop through each local market, making a marketdetails request for each based on their IDs
                 for (let i = 0; i < resArr.length; i++) {
-                  // console.log(`Market IDs for this zip: ${resArr[i].id}`);
                   $.ajax({
-                    //query the API for the market id assigned to the event target
+                    //Query the API for the market id assigned to the event target
                     url: `https://search.ams.usda.gov/farmersmarkets/v1/data.svc/mktDetail?id=${resArr[i].id}`
                   }).then(
                     (data) => {
-                      // console.log(data); //returns local marketdetails as objects
-                      const products = data.marketdetails.Products.split("; ") //try a backslash before space
+                      const products = data.marketdetails.Products.split("; ")
                       const productArr = [] //start with an empty array each time, so that it's fresh for each specific market check
                       productArr.push(products)
-                      //something here so it doesn't display current market selection
+                      //Add something here so it doesn't display current market selection///
                       if (productArr[0].includes(prodHTML)) {
-                        // console.log(`We've got a match! ${resArr[i].marketname} also carries ${prodHTML}.`);
-                        const $mktMatch = $('<h3>').html(resArr[i].marketname.split(' ').slice(1).join(' ')).addClass('mktMatch front')
-                        $mktMatch.on('click', (event) => {
-                          $mktMatch.toggleClass('back')
-                          // $('.back').html('Testing')
-                          $mktMatch.toggleClass('front')
-                        })
-                        // $mktSpecs.append($matchHeader)
+                        const $mktMatch = $('<h3>').html(resArr[i].marketname.split(' ').slice(1).join(' ')).addClass('mktMatch')
+                        // $mktMatch.on('click', (event) => {
+                        //   $mktMatch.toggleClass('back')
+                        // })
                         $matchCont.append($mktMatch)
-                        // $mktSpecs.append($matchCont)
                       } else {
                         console.log(`${resArr[i].marketname} does not carry ${prodHTML}`);
                       }
                     }
                   ) //end .then()
                 } //end result array for loop
-                scroll({
-                  top: 3000,
-                  left: 0,
-                  behavior: 'smooth'
-                })
               }) //end ul on click
-
             },
             () => {
               console.log('request did not work');
