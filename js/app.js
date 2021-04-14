@@ -4,6 +4,8 @@ $(() => { //BEGIN window.onload
 
   /*====== GLOBAL VARS ======*/
 
+  const googleKey = `AIzaSyBT9_mprou4lCaUHTuQNhvRCNM8hyim7LE`
+
   const $pageHeader = $('header')
   const $submit = $('#submit')
   const $mktResultCont = $('#mktname-results')
@@ -143,11 +145,9 @@ $(() => { //BEGIN window.onload
             url: `https://search.ams.usda.gov/farmersmarkets/v1/data.svc/mktDetail?id=${$mktID}`
           }).then(
             (data) => {
-              console.log(`LOCAL MARKET DETAILS DATA:`);
-              console.log(data);
+              // console.log(data);
               $mktSpecs.show()
               const $mktDetails = data.marketdetails
-              // console.log($mktDetails)
               //what if right here, we could perform a google maps query for the data.marketdetails.Address of the event.currentTarget?
               const $address = $('<p>')
                 .html($mktDetails.Address)
@@ -160,6 +160,9 @@ $(() => { //BEGIN window.onload
                 .addClass('mkt-specs')
                 console.log($mktDetails.GoogleLink);
               const googleSearch = $mktDetails.Address.split(' ').join('+')
+              //split at commas, store those strings separately
+              //join words in each separate string with a +
+              //join separate strings with a ,
               console.log(googleSearch);
               // $.ajax({
               //   url: `https://www.google.com/maps/embed/v1/place?key=AIzaSyCpOYsYQDi7AYlherWrBKR7rhDZT86L1Fc&q=${googleSearch}>`
@@ -169,10 +172,11 @@ $(() => { //BEGIN window.onload
               //   }
               // )
               const $map = $('<iframe>')
-                .attr('src', "https://www.google.com/maps/embed/v1/place?q=place_id:ChIJCzYy5IS16lQRQrfeQ5K5Oxw&key=AIzaSyCpOYsYQDi7AYlherWrBKR7rhDZT86L1Fc")
+                .attr('src', `https://www.google.com/maps/embed/v1/place?key=${googleKey}
+    &q=${googleSearch}`)
               .css({'width': '100%', 'height': '250px'})
 
-              const $prodHeader = $('<h4>').html(`This market carries the following products!`)
+              const $prodHeader = $('<h4>').html(`This market carries the following products:`)
               const $prodList = $('<ul>')
                 .addClass('mkt-specs')
               const splitProducts = $mktDetails.Products.split(';')
@@ -200,15 +204,13 @@ $(() => { //BEGIN window.onload
               $mktSpecs.append($prodList)
               $mktSpecs.append($prodChooser)
 
-              // const numOfProducts = $('.list-item')
-              // console.log(numOfProducts);
               scroll({
                 top: 650,
                 left: 0,
                 behavior: 'smooth'
               })
 
-              $('ul').on('click', (event) => {
+              $('li').on('click', (event) => {
 
                 $('.mktMatch').remove()
                 $('#match-container').remove()
@@ -220,7 +222,7 @@ $(() => { //BEGIN window.onload
                 }
                 const prodHTML = charArr.join(' ')
 
-                const $matchHeader = $('<p>').html(`Nice! These markets also carry ${prodHTML}:`).addClass('mktMatch').css({'width': '100%', 'background-color': 'inherit', 'justify-content': 'center', 'max-width': '580px'})
+                const $matchHeader = $('<p>').html(`Nice! These markets also carry ${prodHTML.toLowerCase()}:`).css({'width': '100%', 'background-color': 'inherit', 'justify-content': 'center', 'max-width': '580px'})
                 const $matchCont = $('<div>').attr('id', 'match-container')
                 $mktSpecs.append($matchHeader)
                 $mktSpecs.append($matchCont)
@@ -233,16 +235,18 @@ $(() => { //BEGIN window.onload
                     url: `https://search.ams.usda.gov/farmersmarkets/v1/data.svc/mktDetail?id=${resArr[i].id}`
                   }).then(
                     (data) => {
-                      console.log(data); //returns local marketdetails as objects
+                      // console.log(data); //returns local marketdetails as objects
                       const products = data.marketdetails.Products.split("; ") //try a backslash before space
                       const productArr = [] //start with an empty array each time, so that it's fresh for each specific market check
                       productArr.push(products)
                       //something here so it doesn't display current market selection
                       if (productArr[0].includes(prodHTML)) {
                         // console.log(`We've got a match! ${resArr[i].marketname} also carries ${prodHTML}.`);
-                        const $mktMatch = $('<h3>').html(resArr[i].marketname.split(' ').slice(1).join(' ')).addClass('mktMatch')
+                        const $mktMatch = $('<h3>').html(resArr[i].marketname.split(' ').slice(1).join(' ')).addClass('mktMatch front')
                         $mktMatch.on('click', (event) => {
-                          $mktMatch.toggleClass('flip-card')
+                          $mktMatch.toggleClass('back')
+                          // $('.back').html('Testing')
+                          $mktMatch.toggleClass('front')
                         })
                         // $mktSpecs.append($matchHeader)
                         $matchCont.append($mktMatch)
@@ -292,6 +296,9 @@ $(() => { //BEGIN window.onload
 PROGRAM NOTES AND ATTEMPTS BELOW
 -------------------------------------------------------
 =======================================================*/
+
+//Ways to optimize my code:
+//  - store all marketnames in a function, or variables
 
 // http://maps.google.com/?q=42.165956%2C%20-83.781146%20(%22Saline+Farmers+Market%22
 

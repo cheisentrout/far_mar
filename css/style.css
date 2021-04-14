@@ -114,7 +114,6 @@ header p {
   padding: 0 15px;
   background-size: cover;
   border-radius: 5px;
-  /* transition: .3s ease; */
 }
 
 .mkt-article {
@@ -125,12 +124,6 @@ header p {
   align-items: flex-start; */
   display: none;
 }
-
-/* .mkt-article img {
-  width: 100%;
-  height: auto;
-  /* max-height: 155px; */
-/* }  */
 
 #mktname-results article:first-of-type {
   display: flex;
@@ -144,6 +137,8 @@ header p {
   background: whitesmoke;
   opacity: 80%;
   padding: 10px;
+  max-width: 300px;
+  overflow: hidden;
   border-radius: 5px;
   transition: .5s;
 }
@@ -172,16 +167,14 @@ i:active {
 /* Market Details Styles */
 
 #mkt-specs {
-  /* margin-top: 40px; */
-  /* background: #D6DCD8;
-  padding: 20px; */
   transition: .5s ease;
   letter-spacing: .05em;
 }
 
 h2 {
-  font-size: 2.2em;
+  font-size: 2em;
   color: #557570;
+
 }
 
 #address {
@@ -248,14 +241,22 @@ li:hover {
   align-items: center;
 }
 
-.flip-card {
-  transform: rotateY(180deg);
-  background-color: pink;
-  /* position: absolute;
-  backface-visibility: hidden; */
-}
+/*-- Brief attempt at flipable cards: --*/
 
-/* TABLET STYLES */
+/* .front {
+  /* backface-visibility: hidden; */
+/* } */
+
+/* .back {
+  transform: rotateY(180deg);
+  transition: 2s;
+  background-color: pink;
+  /* backface-visibility: hidden; */
+/* }  */
+
+
+
+/*============= TABLET / DESKTOP STYLES =============*/
 
 @media only screen and (min-width: 768px) {
 
