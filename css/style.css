@@ -1,3 +1,7 @@
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background-color: #CE7E5D;
   color: gray;
@@ -162,6 +166,29 @@ i:hover {
 
 i:active {
   color: red;
+}
+
+.to-top-btn i {
+  font-size: 1.5em;
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  bottom: 40px;
+  right: 40px;
+  color: #557570;
+  background-color: whitesmoke;
+  border-radius: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: .5s;
+  border: 2px solid #A2543D;
+  /* transform: scale(1.1) */
+}
+
+.to-top-btn i:hover {
+  margin-bottom: 10px;
+  /* transform: scale(1.15) */
 }
 
 /* Market Details Styles */

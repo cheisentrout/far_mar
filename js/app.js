@@ -1,6 +1,7 @@
 $(() => { //BEGIN window.onload
 
   $('#clear').hide()
+  $('#to-top-btn').hide()
 
   /*====== GLOBAL VARS ======*/
 
@@ -23,6 +24,7 @@ $(() => { //BEGIN window.onload
     $mktSpecs.empty()
     $mktSpecs.hide()
     $('#clear').show()
+    $('#to-top-btn').show()
 
     //store the user's input in a variable
     const $userZip = $('#search-bar').val()
@@ -75,8 +77,8 @@ $(() => { //BEGIN window.onload
 
         //element that will display total number of markets near userZip:
         const $carItemNum = $('<h3>').html(`There are ${resArr.length} markets near zipcode ${$userZip}!`).addClass('mkt-num')
-        const $nextArrow = $('<i>').addClass("fas fa-long-arrow-alt-right")
-        const $prevArrow = $('<i>').addClass("fas fa-long-arrow-alt-left")
+        const $nextArrow = $('<i>').addClass("fas fa-long-arrow-alt-right").attr('id', 'next')
+        const $prevArrow = $('<i>').addClass("fas fa-long-arrow-alt-left").attr('id', 'prev')
 
         if (idArr.includes("Error") === false) {
           $mktResSummary.append($carItemNum)
@@ -148,7 +150,6 @@ $(() => { //BEGIN window.onload
               // console.log(data);
               $mktSpecs.show()
               const $mktDetails = data.marketdetails
-              //what if right here, we could perform a google maps query for the data.marketdetails.Address of the event.currentTarget?
               const $address = $('<p>')
                 .html($mktDetails.Address)
                 .attr('id', 'address')
@@ -158,19 +159,7 @@ $(() => { //BEGIN window.onload
                 .attr('href', `${$mktDetails.GoogleLink}`)
                 .attr('target', `${$mktDetails.GoogleLink}`)
                 .addClass('mkt-specs')
-                console.log($mktDetails.GoogleLink);
-              const googleSearch = $mktDetails.Address.split(' ').join('+')
-              //split at commas, store those strings separately
-              //join words in each separate string with a +
-              //join separate strings with a ,
-              console.log(googleSearch);
-              // $.ajax({
-              //   url: `https://www.google.com/maps/embed/v1/place?key=AIzaSyCpOYsYQDi7AYlherWrBKR7rhDZT86L1Fc&q=${googleSearch}>`
-              // }).then(
-              //   (data) => {
-              //     console.log(data);
-              //   }
-              // )
+              const googleSearch = $mktDetails.Address
               const $map = $('<iframe>')
                 .attr('src', `https://www.google.com/maps/embed/v1/place?key=${googleKey}
     &q=${googleSearch}`)
@@ -222,7 +211,7 @@ $(() => { //BEGIN window.onload
                 }
                 const prodHTML = charArr.join(' ')
 
-                const $matchHeader = $('<p>').html(`Nice! These markets also carry ${prodHTML.toLowerCase()}:`).css({'width': '100%', 'background-color': 'inherit', 'justify-content': 'center', 'max-width': '580px'})
+                const $matchHeader = $('<p>').html(`Nice! These markets nearby also carry ${prodHTML.toLowerCase()}:`).css({'width': '100%', 'background-color': 'inherit', 'justify-content': 'center', 'max-width': '580px'})
                 const $matchCont = $('<div>').attr('id', 'match-container')
                 $mktSpecs.append($matchHeader)
                 $mktSpecs.append($matchCont)
@@ -280,12 +269,14 @@ $(() => { //BEGIN window.onload
   $('#clear').on('click', (event) => {
     $('.mkt-num').remove()
     $('.mkt-article').remove()
-    $('i').remove()
+    $('#next').remove()
+    $('#prev').remove()
     $('.mkt-specs').remove()
     $mktSpecs.empty()
     $mktSpecs.hide()
     $pageHeader.removeClass('with-results')
     $('#clear').hide()
+    $('#to-top-btn').hide()
   })
 
 }) //END window.onload
