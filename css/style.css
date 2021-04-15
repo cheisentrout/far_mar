@@ -107,6 +107,12 @@ header p {
   background-color: #D39A89;
 }
 
+#search i {
+  font-size: 1em;
+  margin: 10px;
+  color: whitesmoke;
+}
+
 /* Market Carousel Results */
 
 .mkt-num {
